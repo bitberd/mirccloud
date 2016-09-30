@@ -1,5 +1,3 @@
-/* Any copyright is dedicated to the Public Domain.
- http://creativecommons.org/publicdomain/zero/1.0/ */
 /*global Promise, unsafeWindow */
 // ==UserScript==
 // @name irccloud ascii command
@@ -44,7 +42,9 @@
   function init() {
     var _oldsay = window.SESSIONVIEW.mainArea.current.input.__proto__.say;
     window.SESSIONVIEW.mainArea.current.input.__proto__.say = function(m) {
+      console.log(m);
       var cmd = m.split(' ')[0].substr(1);
+      console.log(cmd);
       if (m.startsWith('/') && _COMMANDS.hasOwnProperty(cmd)) {
         this.clear();
         var self = this;

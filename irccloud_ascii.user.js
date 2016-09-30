@@ -1,9 +1,9 @@
 /*global Promise, unsafeWindow */
 // ==UserScript==
 // @name irccloud ascii command
-// @namespace https://github.com/erm/irccloud-asciicommand
-// @description Add a /ascii command to irccloud
-// @downloadURL https://raw.githubusercontent.com/erm/irccloud-asciicommand/master/irccloud_ascii.user.js
+// @namespace https://github.com/erm/irccloud-scripts
+// @description Scroll ascii art in IRCCloud
+// @downloadURL https://raw.githubusercontent.com/erm/irccloud-scripts/master/irccloud_ascii.user.js
 // @version 1
 // @match https://www.irccloud.com/*
 // @match https://irccloud.mozilla.com/*

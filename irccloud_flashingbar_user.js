@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name irccloud flashingbar command
 // @namespace https://github.com/erm/irccloud-scripts
-// @description Add a /fb command
+// @description Alert an entire channel with an important message using IRCCloud
 // @downloadURL https://raw.githubusercontent.com/erm/irccloud-scripts/master/irccloud_flashingbar.user.js
 // @version 1
 // @match https://www.irccloud.com/*

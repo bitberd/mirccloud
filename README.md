@@ -1,12 +1,12 @@
-# irccloud-asciicommand
+# irccloud-scripts
 
 Scroll ascii and mass highlight users using IRCCloud.
 
 
 ## Example usage: 
 
-`/ascii http://wepump.in/ascii/lol.txt`
-`/fb lol`
+- `/ascii http://wepump.in/ascii/lol.txt`
+- `/fb lol`
 
 # Todo
 

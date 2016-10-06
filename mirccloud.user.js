@@ -52,15 +52,16 @@
                 // This command exists, let's retrieve the arguments
                 var args = inputData.slice(1, inputData.length);
                 // Filters
-                var repeat = 1
+                var repeat = 1;
                 var repeatFilter = args.indexOf('-repeat');
-                if (repeatFilter > 0) {
-                  var repeat = args[args.indexOf('-repeat') + 1];
-                  var remove = ' -repeat ' + repeat;
-                  args = args.join(' ');
-                  args = args.replace(remove, '');
-                  args = args.split(' ');
+                if (repeatFilter > -1) {
+                  var repeatIndex = args.indexOf('-repeat');
+                  var repeatNumberIndex = repeatIndex + 1;
+                  repeat = args[repeatNumberIndex];
+                  args = args.splice(repeatIndex, 1);
+                  args = args.splice(repeatNumberIndex, 1);
                 }
+                console.log(args);
                 this.clear()
                 var self = this;
                 if (cmd == 'ascii') {

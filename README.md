@@ -38,4 +38,5 @@ Enhancements for your IRCCloud chatting experience.
 ### Misc
 
 - Add more commands
-- Improve the code (I don't often use Javascript)
+- Better argument parsing
+- Improvement in general (not a JS guy)

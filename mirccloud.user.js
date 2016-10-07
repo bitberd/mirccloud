@@ -12,7 +12,7 @@
 
 
 (function() {
-    DELAY = 0.45;
+    DELAY = 0.00;
     //RUNNING = false;
     function getAscii(url) {
         var ascii = new Promise(function(resolve, reject) {
@@ -39,36 +39,37 @@
       return choices[Math.floor(Math.random() * choices.length)];
     }
 
-    var _COMMANDS = ['ascii', 'fb', 'rst'];
+    var _COMMANDS = ['/ascii', '/fb', '/rst'];
+
+
 
     function init() {
         var context = window.SESSIONVIEW.mainArea.current.input.__proto__.say;
         window.SESSIONVIEW.mainArea.current.input.__proto__.say = function(m) {
-            // Get the user input and extract the command
-            var inputData = m.split(' ');
-            var cmd = inputData[0].substr(1);
-            // Check if this script handles the command
+            var args = m.split(' ');
+            var cmd = args[0];
+            console.log('cmd = '+cmd);
+            console.log('old args'+args);
+            args.splice(0, 1);
+            console.log('new args'+args);
             if (m.startsWith('/') && _COMMANDS.indexOf(cmd) >= 0) {
-                // This command exists, let's retrieve the arguments
-                var args = inputData.slice(1, inputData.length);
-                // Filters
-                var repeat = 1;
-                var repeatFilter = args.indexOf('-repeat');
-                if (repeatFilter > -1) {
-                  var repeatIndex = args.indexOf('-repeat');
-                  var repeatNumberIndex = repeatIndex + 1;
-                  repeat = args[repeatNumberIndex];
-                  args = args.splice(repeatIndex, 1);
-                  args = args.splice(repeatNumberIndex, 1);
+              console.log('args are: '+args);
+                var repeatFilter = 1;
+                var repeatFilterIndex = args.indexOf('-repeat');
+                console.log('index '+repeatFilterIndex);
+                if (repeatFilterIndex !== -1) {
+                  repeatFilter = args[repeatFilterIndex+1];
+                  console.log('yes: '+repeatFilter);
+                  args.splice(repeatFilterIndex, 2);
                 }
-                console.log(args);
+                console.log('repeating: '+repeatFilter);
                 this.clear()
                 var self = this;
-                if (cmd == 'ascii') {
-                  getAscii(args).then(function(outputData) {
-                      //RUNNING = true;
+                if (cmd == '/ascii') {
+                  getAscii(args[0]).then(function(outputData) {
                       var i = -1;
                       var outputText = outputData.split("\n").reverse();
+
                       (function outputLoop(i) {
                           setTimeout(function() {
                               context.apply(self, [outputText[i]]);
@@ -76,33 +77,33 @@
                                   outputLoop(i)
                               };
                           }, DELAY * 1000)
-                      })(outputText.length * repeat);
+                      })(outputText.length);
                   });
                 }
-                if (cmd == 'fb') {
+                if (cmd == '/fb') {
                   var nicklist = window.SESSIONVIEW.mainArea.current.members.$el["0"].innerText.split('\n');
                   var outputText = '';
                   var s = '';
                   for (i = 0; i < nicklist.length; i++) { 
                     s = nicklist[i];
-                    if (s.startsWith('Ops@') || s.startsWith('Members') || s.startsWith('Voiced+') || s.startsWith('Owner~')) {
+                    if (s.startsWith('Ops@') || s.startsWith('HalfOps') || s.startsWith('Members') || s.startsWith('Voiced+') || s.startsWith('Owner~')) {
                       nicklist.splice(i, 1);
                     }
                   }
-                  if (args.length == 0) {
-                    outputText = nicklist.join(' ');
-                  } else {
+                  if (args[0] !== undefined) {
                     outputText = nicklist.join(' ' + args.join(' ') + ' ');
+                  } else {
+                    outputText = nicklist.join(' ');
                   }
-                  if (repeat > 1) {
-                    for (i = 0; i < repeat; i++) { 
+                  if (repeatFilter > 1) {
+                    for (i = 0; i < repeatFilter; i++) { 
                       context.apply(this, [outputText]);
                     }
                   } else {
                     context.apply(this, [outputText]);
                   }
                 }
-                if (cmd == 'rst') {
+                if (cmd == '/rst') {
                   var choice = '';
                   var marks = ["☑","☒","☓","✓","✔","✕","✖","✗","✘"];
                   var choices = {
@@ -111,16 +112,14 @@
                     'same': '[ ] rude [ ] tru [X] same'
                   };
                   var mark = randomChoice(marks);
-                  if (args.length == 0) {
-                    var keys = ['rude', 'tru', 'same'];
-                    var key_choice = randomChoice(keys);
-                    choice = choices[key_choice];
-                  } else {
-                    choice = choices[args];
-                  }
+                  if (args[0] !== undefined) {
+                     choice = choices[args];
+                   } else {
+                      choice = choices[randomChoice(['rude', 'tru', 'same'])];
+                   }
                   var outputText = choice.replace('X', mark)
-                  if (repeat > 1) {
-                    for (i = 0; i < repeat; i++) { 
+                  if (repeatFilter > 1) {
+                    for (i = 0; i < repeatFilter; i++) { 
                       context.apply(this, [outputText]);
                     }
                   } else {

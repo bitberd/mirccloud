@@ -10,6 +10,8 @@ Enhancements for your IRCCloud chatting experience.
 
 - `/rst <optional ['rude', 'tru', 'same']>` - Qualify the previous line of chat with a nifty checkbox reaction.
 
+- `/troll` - Get a random troll and post it to the channel,
+
 ## Available filters
 
 - `-repeat [n]` - Repeat a command n times. This filter can be used on any command.
@@ -18,6 +20,7 @@ Enhancements for your IRCCloud chatting experience.
 
 - `/ascii http://wepump.in/ascii/lol.txt`
 - `/fb lol hey everyone -repeat 3`
+- `/troll`
 
 ## Todo
 

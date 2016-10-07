@@ -14,7 +14,7 @@ Enhancements for your IRCCloud chatting experience.
 
 ## Available filters
 
-- `-repeat [n]` - Repeat a command n times. This filter can be used on any command.
+- `-repeat [n]` - Repeat a command n times. This filter can be used on any command (except /ascii and /troll atm LOL)
 
 ## Example usage: 
 

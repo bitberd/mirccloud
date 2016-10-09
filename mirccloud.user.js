@@ -10,9 +10,6 @@
 // @grant none
 // ==/UserScript==
 (function() {
-
-    const _COMMANDS = ['/ascii', '/fb', '/rst', '/troll'];
-
     function init() {
         var context = window.SESSIONVIEW.mainArea.current.input.__proto__.say;
         window.SESSIONVIEW.mainArea.current.input.__proto__.say = function(m) {
@@ -20,6 +17,8 @@
             var cmd = args[0];
             args.splice(0, 1);
             if (m.startsWith('/') && _COMMANDS.indexOf(cmd) >= 0) {
+                var outputText = [];
+                // Handle filters
                 var repeatFilter = 1;
                 var repeatFilterIndex = args.indexOf('-repeat');
                 if (repeatFilterIndex !== -1) {
@@ -28,29 +27,28 @@
                 }
                 this.clear()
                 var self = this;
-                if (cmd == '/troll') {
-                    getTroll().then(function(outputData) {
+                if (cmd == '/troll' || cmd == '/ascii') {
+                    var requestArgs = (cmd == '/troll') ? false : args[0];
+                    getRequest(requestArgs).then(function(outputData) {
+                      if (cmd == '/troll') {
                         context.apply(self, [outputData]);
-                    });
-
-                }
-                if (cmd == '/ascii') {
-                    getAscii(args[0]).then(function(outputData) {
+                      } else {
                         var i = -1;
-                        var outputText = outputData.split("\n").reverse();
-
+                        var outputText = outputData.split('\n').reverse();
                         (function outputLoop(i) {
                             setTimeout(function() {
                                 context.apply(self, [outputText[i]]);
-                                if (--i) { //&& RUNNING == true) {
+                                if (--i) {
                                     outputLoop(i)
                                 };
                             }, DELAY * 1000)
-                        })(outputText.length);
+                        })(outputText.length + 1);
+                      }
                     });
                 }
+      
                 if (cmd == '/fb') {
-                    var nicklist = window.SESSIONVIEW.mainArea.current.members.$el["0"].innerText.split('\n');
+                    var nicklist = window.SESSIONVIEW.mainArea.current.members.$el['0'].innerText.split('\n');
                     var outputText = '';
                     var s = '';
                     for (i = 0; i < nicklist.length; i++) {
@@ -111,14 +109,13 @@
     })();
 })();
 
-// Helper functions
-
 function randomChoice(choices) {
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
-function getAscii(url) {
-    var ascii = new Promise(function(resolve, reject) {
+function getRequest(requestArgs) {
+    var requestUrl = '';
+    var response = new Promise(function(resolve, reject) {
         var req = new XMLHttpRequest();
         req.responseType = "text";
         req.onload = function() {
@@ -131,36 +128,20 @@ function getAscii(url) {
         req.onerror = function(e) {
             reject(e);
         };
-        req.open('GET', 'https://crossorigin.me/' + url, true);
+        if (requestArgs == false) {
+            random_value = '?t=' + Math.random();
+            requestUrl = 'http://rolloffle.churchburning.org/troll_me_text.php' + '?t=' + Math.random();
+        } else {
+            requestUrl = requestArgs;
+        }
+        req.open('GET', 'https://crossorigin.me/' + requestUrl, true);
         req.send();
     });
-    return ascii;
+    return response;
 }
 
-function getTroll() {
-    var troll = new Promise(function(resolve, reject) {
-        var req = new XMLHttpRequest();
-        req.responseType = "text";
-        req.onload = function() {
-            if (req.status != 200) {
-                reject("Failed");
-            } else {
-                resolve(req.response);
-            }
-        };
-        req.onerror = function(e) {
-            reject(e);
-        };
-        random_value = '?t=' + Math.random();
-        req.open('GET', 'https://crossorigin.me/http://rolloffle.churchburning.org/troll_me_text.php' + random_value, true);
-        req.send();
-    });
-    return troll;
-}
-
-// Variables for commands
-
-const DELAY = 0.00;
+const _COMMANDS = ['/ascii', '/fb', '/rst', '/troll'];
+const DELAY = 0.35;
 const RST_MARKS = ["☑", "☒", "☓", "✓", "✔", "✕", "✖", "✗", "✘"];
 const RST_CHOICES = {
     'rude': '[X] rude [ ] tru [ ] same',

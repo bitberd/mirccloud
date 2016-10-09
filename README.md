@@ -10,7 +10,12 @@ Enhancements for your IRCCloud chatting experience.
 
 - `/rst <optional ['rude', 'tru', 'same']>` - Qualify the previous line of chat with a nifty checkbox reaction.
 
-- `/troll` - Get a random troll and post it to the channel,
+- `/troll` - Get a random troll and post it to the channel.
+
+## Coming soon 
+
+- `/amsg`
+- `/perform`
 
 ## Available filters
 
@@ -42,4 +47,4 @@ Enhancements for your IRCCloud chatting experience.
 
 - Add more commands
 - Better argument parsing
-- Improvement in general (not a JS guy)
+- Improvement in general

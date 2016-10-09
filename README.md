@@ -12,19 +12,23 @@ Enhancements for your IRCCloud chatting experience.
 
 - `/troll` - Get a random troll and post it to the channel.
 
+- `/say` - Send a message to the channel using the available filters.
+
 ## Coming soon 
 
 - `/amsg`
 - `/perform`
+- `/alias`
 
 ## Available filters
 
 - `-repeat [n]` - Repeat a command n times. This filter can be used on any command (except /ascii and /troll atm LOL)
+- `-color [r,]` - Colorize text, currently only one option `-r` for random foreground and background for all characters.
 
 ## Example usage: 
 
 - `/ascii http://wepump.in/ascii/lol.txt`
-- `/fb lol hey everyone -repeat 3`
+- `/fb lol hey everyone -repeat 3 -color r`
 - `/troll`
 
 ## Todo
@@ -40,11 +44,4 @@ Enhancements for your IRCCloud chatting experience.
 - Allow ending a currently running ascii scroll
 
 ### Flashing Bar
-- Allow mass commands
-
-
-### Misc
-
-- Add more commands
-- Better argument parsing
-- Improvement in general
+- Allow mass `/perform` commands

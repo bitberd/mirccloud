@@ -9,6 +9,7 @@
 // @noframes
 // @grant none
 // ==/UserScript==
+
 (function() {
     function init() {
         var context = window.SESSIONVIEW.mainArea.current.input.__proto__.say;
@@ -18,35 +19,41 @@
             args.splice(0, 1);
             if (m.startsWith('/') && _COMMANDS.indexOf(cmd) >= 0) {
                 var outputText = [];
-                // Handle filters
+                // Repeat filter
                 var repeatFilter = 1;
                 var repeatFilterIndex = args.indexOf('-repeat');
                 if (repeatFilterIndex !== -1) {
-                    repeatFilter = args[repeatFilterIndex + 1];
-                    args.splice(repeatFilterIndex, 2);
+                    args,
+                    repeatFilter = getFilterArgs(repeatFilterIndex, args)
+                }
+                // Color filter
+                var colorFilter = false;
+                var colorFilterIndex = args.indexOf('-color');
+                if (colorFilterIndex !== -1) {
+                    args,
+                    colorFilter = getFilterArgs(colorFilterIndex, args);
                 }
                 this.clear()
                 var self = this;
                 if (cmd == '/troll' || cmd == '/ascii') {
                     var requestArgs = (cmd == '/troll') ? false : args[0];
                     getRequest(requestArgs).then(function(outputData) {
-                      if (cmd == '/troll') {
-                        context.apply(self, [outputData]);
-                      } else {
-                        var i = -1;
-                        var outputText = outputData.split('\n').reverse();
-                        (function outputLoop(i) {
-                            setTimeout(function() {
-                                context.apply(self, [outputText[i]]);
-                                if (--i) {
-                                    outputLoop(i)
-                                };
-                            }, DELAY * 1000)
-                        })(outputText.length + 1);
-                      }
+                        if (cmd == '/troll') {
+                            context.apply(self, [outputData]);
+                        } else {
+                            var i = -1;
+                            var outputText = outputData.split('\n').reverse();
+                            (function outputLoop(i) {
+                                setTimeout(function() {
+                                    context.apply(self, [outputText[i]]);
+                                    if (--i) {
+                                        outputLoop(i)
+                                    };
+                                }, DELAY * 1000)
+                            })(outputText.length + 1);
+                        }
                     });
                 }
-      
                 if (cmd == '/fb') {
                     var nicklist = window.SESSIONVIEW.mainArea.current.members.$el['0'].innerText.split('\n');
                     var outputText = '';
@@ -62,13 +69,6 @@
                     } else {
                         outputText = nicklist.join(' ');
                     }
-                    if (repeatFilter > 1) {
-                        for (i = 0; i < repeatFilter; i++) {
-                            context.apply(this, [outputText]);
-                        }
-                    } else {
-                        context.apply(this, [outputText]);
-                    }
                 }
                 if (cmd == '/rst') {
                     var choice = '';
@@ -80,6 +80,23 @@
                         choice = RST_CHOICES[randomChoice(['rude', 'tru', 'same'])];
                     }
                     var outputText = choice.replace('X', mark)
+                }
+                if (cmd == '/say') {
+                    outputText = args.join(' ');
+                }
+                if (cmd != '/troll' || cmd != '/ascii') {
+                    if (colorFilter != false) {
+                        if (colorFilter == 'r') {
+                            var outputTextOld = outputText.slice(0);
+                            var outputText = '';
+                            for (i = 0; i < outputTextOld.length; i++) {
+                                var randomColors = randomColorCode(true);
+                                var fgColor = randomColors[0];
+                                var bgColor = randomColors[1];
+                                outputText += '' + fgColor + ',' + bgColor + outputTextOld[i] + '';
+                            }
+                        }
+                    }
                     if (repeatFilter > 1) {
                         for (i = 0; i < repeatFilter; i++) {
                             context.apply(this, [outputText]);
@@ -113,6 +130,23 @@ function randomChoice(choices) {
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
+function randomColorCode(pair) {
+    var colorCodeRange = [...Array(15 + 1).keys()].slice(1);
+    var colorCodeOne = randomChoice(colorCodeRange);
+    if (pair != false) {
+        colorCodeRange.splice(colorCodeRange.indexOf(colorCodeOne), 1)
+        var colorCodeTwo = randomChoice(colorCodeRange);
+        return [colorCodeOne, colorCodeTwo];
+    }
+    return colorCodeOne;
+}
+
+function getFilterArgs(filterIndex, args) {
+    filterArg = args[filterIndex + 1];
+    args.splice(filterIndex, 2);
+    return args, filterArg
+}
+
 function getRequest(requestArgs) {
     var requestUrl = '';
     var response = new Promise(function(resolve, reject) {
@@ -140,7 +174,7 @@ function getRequest(requestArgs) {
     return response;
 }
 
-const _COMMANDS = ['/ascii', '/fb', '/rst', '/troll'];
+const _COMMANDS = ['/ascii', '/fb', '/rst', '/troll', '/say'];
 const DELAY = 0.35;
 const RST_MARKS = ["☑", "☒", "☓", "✓", "✔", "✕", "✖", "✗", "✘"];
 const RST_CHOICES = {

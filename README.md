@@ -14,7 +14,7 @@ Enhancements for your IRCCloud chatting experience.
 
 - `/say <text>` - Send a message to the channel using the available filters.
 
-- `/hueg <text>` - Basic HUEG text support. 
+- `/hueg <text>` - Basic HUEG text support. (basic support, somewhat broken atm)
 
 ## Coming soon 
 
@@ -49,7 +49,7 @@ Enhancements for your IRCCloud chatting experience.
 ### Flashing Bar
 - Allow mass `/perform` commands
 
-### Commands
-- `/amsg`
-- `/alias`
-- `/box`
+### Hueg
+- Spaces between words
+- Max characters/line breaks
+- Sizing/other filters

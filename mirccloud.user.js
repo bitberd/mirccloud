@@ -3,13 +3,12 @@
 // @namespace https://github.com/erm/mirccloud
 // @description IRCCloud chat enhancement
 // @downloadURL https://raw.githubusercontent.com/erm/mirccloud/master/mirccloud.user.js
-// @version 1
+// @version 1.2.2
 // @match https://www.irccloud.com/*
 // @match https://irccloud.mozilla.com/*
 // @noframes
 // @grant none
 // ==/UserScript==
-
 (function() {
     function init() {
         var context = window.SESSIONVIEW.mainArea.current.input.__proto__.say;
@@ -17,7 +16,7 @@
             var args = m.split(' ');
             var cmd = args[0];
             args.splice(0, 1);
-            if (m.startsWith('/') && _COMMANDS.indexOf(cmd) >= 0) {
+            if (m.startsWith('/') && COMMANDS.indexOf(cmd) >= 0) {
                 var outputText = [];
                 // Repeat filter
                 var repeatFilter = 1;
@@ -32,9 +31,43 @@
                 if (colorFilterIndex !== -1) {
                     args,
                     colorFilter = getFilterArgs(colorFilterIndex, args);
+                    if (COLOR_FILTER_OPTIONS.indexOf(colorFilter) == -1) {
+                        colorFilter = false;
+                    }
                 }
                 this.clear()
                 var self = this;
+                if (cmd == '/hueg') {
+                    var randomColors = randomColorCode(true);
+                    var r1 = randomColors[0];
+                    var r2 = randomColors[1];
+                    var c2 = "" + r1 + "," + r1; 
+                    var c1 = "" + r2 + "," + r2; 
+                    var c3 = ""; 
+                    var buffer = [];
+                    var strs = args;
+                    for (i = 0; i < strs.length; i++) {
+                        var count = 0;
+                        var listl = strs[i].split().length;
+                        for (z = 0; z < strs[i].length; z++) {
+                            var l = strs[i][z];
+                            char = c3 + HUEG_CHARS[l];
+                            char = char.split('$c1').join(c1);
+                            char = char.split('$c2').join(c2);
+                            char = char.split('$c3').join(c3);
+                            char = char.split('\n').join('\n' + c3 + " ")
+                            if (count == listl) {
+                                char = char.split('\n').join(c3 + ' \n');
+                            }
+                            buffer.push(char);
+                            count = count + 1;
+                        }
+                    }
+                    var newbuffer = lineUp(buffer);
+                    for (i = 0; i < newbuffer.length; i++) {
+                        context.apply(self, [newbuffer[i]]);
+                    }
+                }
                 if (cmd == '/troll' || cmd == '/ascii') {
                     var requestArgs = (cmd == '/troll') ? false : args[0];
                     getRequest(requestArgs).then(function(outputData) {
@@ -84,11 +117,11 @@
                 if (cmd == '/say') {
                     outputText = args.join(' ');
                 }
-                if (cmd != '/troll' || cmd != '/ascii') {
+                if (cmd != '/troll' && cmd != '/ascii' && cmd != '/hueg') {
                     if (colorFilter != false) {
-                        if (colorFilter == 'r') {
-                            var outputTextOld = outputText.slice(0);
-                            var outputText = '';
+                        var outputTextOld = outputText.slice(0);
+                        var outputText = '';
+                        if (colorFilter == 'rand') {
                             for (i = 0; i < outputTextOld.length; i++) {
                                 var randomColors = randomColorCode(true);
                                 var fgColor = randomColors[0];
@@ -96,6 +129,9 @@
                                 outputText += '' + fgColor + ',' + bgColor + outputTextOld[i] + '';
                             }
                         }
+                        // if (colorFilter == 'rb') {
+
+                        // }
                     }
                     if (repeatFilter > 1) {
                         for (i = 0; i < repeatFilter; i++) {
@@ -126,16 +162,41 @@
     })();
 })();
 
+function lineUp(buff) {
+    var newbuff = [];
+    var i = '';
+    var index = 0;
+    for (j = 0; j < buff.length; j++) {
+        i = buff[j];
+        index = buff.indexOf(i);
+        i = i.split('\n');
+        i.splice(0, 1);
+        i.pop();
+        buff[index] = i;
+    }
+    var line = '';
+    var x = '';
+    for (i = 0; i < 9; i++) {
+        line = '';
+        for (z = 0; z < buff.length; z++) {
+            x = buff[z];
+            line = line + x[i]
+        }
+        newbuff.push(line);
+    }
+    return newbuff
+}
+
 function randomChoice(choices) {
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
 function randomColorCode(pair) {
-    var colorCodeRange = [...Array(15 + 1).keys()].slice(1);
-    var colorCodeOne = randomChoice(colorCodeRange);
+    var _colorCodeRange = COLOR_CODE_RANGE.slice(1);
+    var colorCodeOne = randomChoice(_colorCodeRange);
     if (pair != false) {
-        colorCodeRange.splice(colorCodeRange.indexOf(colorCodeOne), 1)
-        var colorCodeTwo = randomChoice(colorCodeRange);
+        _colorCodeRange.splice(_colorCodeRange.indexOf(colorCodeOne), 1)
+        var colorCodeTwo = randomChoice(_colorCodeRange);
         return [colorCodeOne, colorCodeTwo];
     }
     return colorCodeOne;
@@ -174,7 +235,9 @@ function getRequest(requestArgs) {
     return response;
 }
 
-const _COMMANDS = ['/ascii', '/fb', '/rst', '/troll', '/say'];
+const COLOR_FILTER_OPTIONS = ['rand']; //, 'rb', 'usa'];
+const COLOR_CODE_RANGE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+const COMMANDS = ['/ascii', '/fb', '/rst', '/troll', '/say', '/hueg'];
 const DELAY = 0.35;
 const RST_MARKS = ["☑", "☒", "☓", "✓", "✔", "✕", "✖", "✗", "✘"];
 const RST_CHOICES = {
@@ -182,3 +245,1062 @@ const RST_CHOICES = {
     'tru': '[ ] rude [X] tru [ ] same',
     'same': '[ ] rude [ ] tru [X] same'
 };
+
+const HUEG_CHARS = {
+    " ": `
+$c3      
+$c3      
+$c3      
+$c3      
+$c3      
+$c3      
+$c3      
+$c3      
+$c3      
+`,
+    "\u5350": `
+$c3             
+$c1 $c2  $c3  $c1 $c2       $c3
+$c1 $c2  $c3  $c1 $c2  $c3     
+$c1 $c2  $c3  $c1 $c2  $c3     
+$c1 $c2            $c3
+$c3     $c1 $c2  $c3  $c1 $c2  $c3
+$c3     $c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2       $c3  $c1 $c2  $c3
+$c3             
+`,
+    "0": `
+$c3         
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3 $c1 $c2      $c3 
+$c3         
+`,
+    "1": `
+$c3       
+$c3  $c1 $c2  $c3  
+$c3 $c1 $c2   $c3  
+$c1 $c2    $c3  
+$c3  $c1 $c2  $c3  
+$c3  $c1 $c2  $c3  
+$c3  $c1 $c2  $c3  
+$c1 $c2      $c3
+$c3       
+`,
+    "2": `
+$c3        
+$c3 $c1 $c2     $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3    $c1 $c2  $c3 
+$c3   $c1 $c2  $c3  
+$c3  $c1 $c2  $c3   
+$c3 $c1 $c2  $c3    
+$c1 $c2       $c3
+$c3        
+`,
+    "3": `
+$c3        
+$c3 $c1 $c2     $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3     $c1 $c2  $c3
+$c3   $c1 $c2   $c3 
+$c3     $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3 $c1 $c2     $c3 
+$c3        
+`,
+    "4": `
+$c3        
+$c3    $c1 $c2  $c3 
+$c3   $c1 $c2   $c3 
+$c3  $c1 $c2 $c1 $c2  $c3 
+$c3 $c1 $c2 $c3 $c1 $c2  $c3 
+$c1 $c2       $c3
+$c3    $c1 $c2  $c3 
+$c3    $c1 $c2  $c3 
+$c3        
+`,
+    "5": `
+$c3        
+$c1 $c2      $c3 
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2      $c3 
+$c3     $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3 $c1 $c2     $c3 
+$c3        
+`,
+    "6": `
+$c3        
+$c3   $c1 $c2  $c3  
+$c3  $c1 $c2  $c3   
+$c3 $c1 $c2  $c3    
+$c1 $c2      $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3 $c1 $c2     $c3 
+$c3        
+`,
+    "7": `
+$c3         
+$c1 $c2        $c3
+$c3      $c1 $c2  $c3
+$c3     $c1 $c2  $c3 
+$c3    $c1 $c2  $c3  
+$c3   $c1 $c2  $c3   
+$c3  $c1 $c2  $c3    
+$c3 $c1 $c2  $c3     
+$c3         
+`,
+    "8": `
+$c3         
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3 $c1 $c2      $c3 
+$c3         
+`,
+    "9": `
+$c3        
+$c3 $c1 $c2     $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3 $c1 $c2      $c3
+$c3    $c1 $c2  $c3 
+$c3   $c1 $c2  $c3  
+$c3  $c1 $c2  $c3   
+$c3        
+`,
+    "A": `
+$c3        
+$c3  $c1 $c2   $c3  
+$c3 $c1 $c2  $c1 $c2  $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2       $c3
+$c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3        
+`,
+    "a": `
+$c3         
+$c3         
+$c3         
+$c3 $c1 $c2     $c3  
+$c3     $c1 $c2  $c3 
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3  $c1 $c2  $c3 
+$c3 $c1 $c2       $c3
+$c3         
+`,
+    "B": `
+$c3         
+$c1 $c2       $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2       $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2       $c3 
+$c3         
+`,
+    "b": `
+$c3         
+$c1 $c2  $c3      
+$c1 $c2  $c3      
+$c1 $c2      $c3  
+$c1 $c2  $c3  $c1 $c2  $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2  $c3 
+$c1 $c2      $c3  
+$c3         
+`,
+    "C": `
+$c3         
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3      
+$c1 $c2  $c3      
+$c1 $c2  $c3      
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3 $c1 $c2      $c3 
+$c3         
+`,
+    "c": `
+$c3        
+$c3        
+$c3        
+$c3  $c1 $c2     $c3
+$c3 $c1 $c2  $c3    
+$c1 $c2  $c3     
+$c3 $c1 $c2  $c3    
+$c3  $c1 $c2     $c3
+$c3        
+`,
+    "D": `
+$c3          
+$c1 $c2       $c3  
+$c1 $c2  $c3   $c1 $c2  $c3 
+$c1 $c2  $c3    $c1 $c2  $c3
+$c1 $c2  $c3    $c1 $c2  $c3
+$c1 $c2  $c3    $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3 
+$c1 $c2       $c3  
+$c3          
+`,
+    "d": `
+$c3         
+$c3      $c1 $c2  $c3
+$c3      $c1 $c2  $c3
+$c3  $c1 $c2      $c3
+$c3 $c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3 $c1 $c2  $c3  $c1 $c2  $c3
+$c3  $c1 $c2      $c3
+$c3         
+`,
+    "E": `
+$c3        
+$c1 $c2       $c3
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2      $c3 
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2       $c3
+$c3        
+`,
+    "e": `
+$c3         
+$c3         
+$c3         
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  
+$c1 $c2       $c3 
+$c1 $c2  $c3      
+$c3 $c1 $c2      $c3 
+$c3         
+`,
+    "F": `
+$c3        
+$c1 $c2       
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2      $c3 
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c3        
+`,
+    "f": `
+$c3      
+$c3      
+$c3  $c1 $c2   
+$c3 $c1 $c2  $c3  
+$c1 $c2     
+$c3 $c1 $c2  $c3  
+$c3 $c1 $c2  $c3  
+$c3 $c1 $c2  $c3  
+$c3      
+`,
+    "G": `
+$c3          
+$c3  $c1 $c2      $c3 
+$c3 $c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3       
+$c1 $c2  $c3  $c1 $c2    $c3
+$c1 $c2  $c3    $c1 $c2  $c3
+$c3 $c1 $c2  $c3   $c1 $c2  $c3
+$c3  $c1 $c2      $c3 
+$c3          
+`,
+    "g": `
+$c3         
+$c3         
+$c3         
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3 $c1 $c2       $c3
+$c3      $c1 $c2  $c3
+$c3 $c1 $c2      $c3 
+`,
+    "H": `
+$c3         
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2        $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3         
+`,
+    "h": `
+$c3         
+$c1 $c2  $c3      
+$c1 $c2  $c3      
+$c1 $c2       $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3         
+`,
+    "I": `
+$c3       
+$c1 $c2      $c3
+$c3  $c1 $c2  $c3  
+$c3  $c1 $c2  $c3  
+$c3  $c1 $c2  $c3  
+$c3  $c1 $c2  $c3  
+$c3  $c1 $c2  $c3  
+$c1 $c2      $c3
+$c3       
+`,
+    "i": `
+$c3     
+$c3 $c1 $c2  $c3 
+$c3     
+$c1 $c2   $c3 
+$c3 $c1 $c2  $c3 
+$c3 $c1 $c2  $c3 
+$c3 $c1 $c2  $c3 
+$c1 $c2    
+$c3     
+`,
+    "J": `
+$c3        
+$c3 $c1 $c2      
+$c3    $c1 $c2  $c3 
+$c3    $c1 $c2  $c3 
+$c3    $c1 $c2  $c3 
+$c3    $c1 $c2  $c3 
+$c1 $c2  $c3 $c1 $c2  $c3 
+$c3 $c1 $c2    $c3  
+$c3        
+`,
+    "j": `
+$c3       
+$c3    $c1 $c2  
+$c3       
+$c3   $c1 $c2   
+$c3    $c1 $c2  
+$c3    $c1 $c2  
+$c3    $c1 $c2  
+$c1 $c2  $c3 $c1 $c2  
+$c3 $c1 $c2    $c3 
+`,
+    "K": `
+$c3        
+$c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2  $c3 $c1 $c2  $c3 
+$c1 $c2  $c1 $c2  $c3  
+$c1 $c2    $c3   
+$c1 $c2  $c1 $c2  $c3  
+$c1 $c2  $c3 $c1 $c2  $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3        
+`,
+    "k": `
+$c3        
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2  $c3  $c1 $c2  
+$c1 $c2  $c3 $c1 $c2  $c3 
+$c1 $c2     $c3  
+$c1 $c2  $c3 $c1 $c2  $c3 
+$c1 $c2  $c3  $c1 $c2  
+$c3        
+`,
+    "L": `
+$c3        
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2       $c3
+$c3        
+`,
+    "l": `
+$c3     
+$c1 $c2   $c3 
+$c3 $c1 $c2  $c3 
+$c3 $c1 $c2  $c3 
+$c3 $c1 $c2  $c3 
+$c3 $c1 $c2  $c3 
+$c3 $c1 $c2  $c3 
+$c1 $c2    
+$c3     
+`,
+    "M": `
+$c3            
+$c1 $c2  $c3      $c1 $c2  $c3
+$c1 $c2   $c3    $c1 $c2   $c3
+$c1 $c2    $c3  $c1 $c2    $c3
+$c1 $c2  $c1 $c2  $c1 $c2  $c1 $c2  $c3
+$c1 $c2  $c3 $c1 $c2   $c3 $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2 $c3  $c1 $c2  $c3
+$c1 $c2  $c3      $c1 $c2  $c3
+$c3            
+`,
+    "m": `
+$c3          
+$c3          
+$c3          
+$c3 $c1 $c2  $c3  $c1 $c2  $c3 
+$c1 $c2    $c1 $c2    $c3
+$c1 $c2  $c1 $c2   $c1 $c2  $c3
+$c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
+$c1 $c2  $c3    $c1 $c2  $c3
+$c3          
+`,
+    "N": `
+$c3           
+$c1 $c2   $c3    $c1 $c2  
+$c1 $c2    $c3   $c1 $c2  
+$c1 $c2  $c1 $c2  $c3  $c1 $c2  
+$c1 $c2  $c3 $c1 $c2  $c3 $c1 $c2  
+$c1 $c2  $c3  $c1 $c2  $c1 $c2  
+$c1 $c2  $c3   $c1 $c2    
+$c1 $c2  $c3    $c1 $c2   
+$c3           
+`,
+    "n": `
+$c3         
+$c3         
+$c3         
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3         
+`,
+    "O": `
+$c3           
+$c3  $c1 $c2      $c3  
+$c3 $c1 $c2  $c3   $c1 $c2  $c3 
+$c1 $c2  $c3     $c1 $c2  $c3
+$c1 $c2  $c3     $c1 $c2  $c3
+$c1 $c2  $c3     $c1 $c2  $c3
+$c3 $c1 $c2  $c3   $c1 $c2  $c3 
+$c3  $c1 $c2      $c3  
+$c3           
+`,
+    "o": `
+$c3         
+$c3         
+$c3         
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3 $c1 $c2      $c3 
+$c3         
+`,
+    "P": `
+$c3         
+$c1 $c2       $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2       $c3 
+$c1 $c2  $c3      
+$c1 $c2  $c3      
+$c1 $c2  $c3      
+$c3         
+`,
+    "p": `
+$c3         
+$c3         
+$c3         
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2       $c3 
+$c1 $c2  $c3      
+$c1 $c2  $c3      
+`,
+    "Q": `
+$c3           
+$c3  $c1 $c2      $c3  
+$c3 $c1 $c2  $c3   $c1 $c2  $c3 
+$c1 $c2  $c3     $c1 $c2  $c3
+$c1 $c2  $c3     $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2  $c1 $c2  $c3
+$c3 $c1 $c2  $c3  $c1 $c2   $c3 
+$c3  $c1 $c2      $c3  
+$c3       $c1 $c2  $c3 
+`,
+    "q": `
+$c3         
+$c3         
+$c3         
+$c3 $c1 $c2      $c3 
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3 $c1 $c2       $c3
+$c3      $c1 $c2  $c3
+$c3      $c1 $c2  $c3
+`,
+    "R": `
+$c3           
+$c1 $c2       $c3   
+$c1 $c2  $c3   $c1 $c2  $c3  
+$c1 $c2  $c3   $c1 $c2  $c3  
+$c1 $c2       $c3   
+$c1 $c2  $c3   $c1 $c2  $c3  
+$c1 $c2  $c3    $c1 $c2  $c3 
+$c1 $c2  $c3     $c1 $c2  
+$c3           
+`,
+    "r": `
+$c3        
+$c3        
+$c3        
+$c3 $c1 $c2     $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c1 $c2  $c3     
+$c3        
+`,
+    "S": `
+$c3        
+$c3 $c1 $c2     $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2  $c3     
+$c3 $c1 $c2     $c3 
+$c3     $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3 $c1 $c2     $c3 
+$c3        
+`,
+    "s": `
+$c3       
+$c3       
+$c3       
+$c3 $c1 $c2     $c3
+$c1 $c2  $c3    
+$c3 $c1 $c2    $c3 
+$c3    $c1 $c2  $c3
+$c1 $c2     $c3 
+$c3       
+`,
+    "T": `
+$c3         
+$c1 $c2        $c3
+$c3   $c1 $c2  $c3   
+$c3   $c1 $c2  $c3   
+$c3   $c1 $c2  $c3   
+$c3   $c1 $c2  $c3   
+$c3   $c1 $c2  $c3   
+$c3   $c1 $c2  $c3   
+$c3         
+`,
+    "t": `
+$c3       
+$c3       
+$c3 $c1 $c2  $c3   
+$c1 $c2     $c3 
+$c3 $c1 $c2  $c3   
+$c3 $c1 $c2  $c3   
+$c3 $c1 $c2  $c1 $c2  
+$c3  $c1 $c2   $c3 
+$c3       
+`,
+    "U": `
+$c3           
+$c1 $c2  $c3     $c1 $c2  $c3
+$c1 $c2  $c3     $c1 $c2  $c3
+$c1 $c2  $c3     $c1 $c2  $c3
+$c1 $c2  $c3     $c1 $c2  $c3
+$c1 $c2  $c3     $c1 $c2  $c3
+$c3 $c1 $c2  $c3   $c1 $c2  $c3 
+$c3  $c1 $c2      $c3  
+$c3           
+`,
+    "u": `
+$c3         
+$c3         
+$c3         
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c1 $c2  $c3   $c1 $c2  $c3
+$c3 $c1 $c2      $c3 
+$c3         
+`,
+    "V": `
+$c3             
+$c1 $c2 $c3         $c1 $c2 
+$c1 $c2  $c3       $c1 $c2  
+$c3 $c1 $c2  $c3     $c1 $c2  $c3 
+$c3  $c1 $c2  $c3   $c1 $c2  $c3  
+$c3   $c1 $c2  $c3 $c1 $c2  $c3   
+$c3    $c1 $c2    $c3    
+$c3     $c1 $c2  $c3     
+$c3             
+`,
+    "v": `
+$c3            
+$c3            
+$c3            
+$c1 $c2  $c3      $c1 $c2  
+$c3 $c1 $c2  $c3    $c1 $c2  $c3 
+$c3  $c1 $c2  $c3  $c1 $c2  $c3  
+$c3   $c1 $c2  $c1 $c2  $c3   
+$c3    $c1 $c2   $c3    
+$c3            
+`,
+    "W": `
+$c3           
+$c1 $c2  $c3     $c1 $c2  
+$c1 $c2  $c3     $c1 $c2  
+$c1 $c2  $c3     $c1 $c2  
+$c1 $c2  $c3 $c1 $c2  $c3 $c1 $c2  
+$c1 $c2  $c1 $c2    $c1 $c2  
+$c1 $c2    $c3 $c1 $c2    
+$c3 $c1 $c2  $c3   $c1 $c2  $c3 
+$c3           
+`,
+    "w": `
+$c3          
+$c3          
+$c3          
+$c1 $c2  $c3    $c1 $c2  $c3
+$c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
+$c1 $c2  $c1 $c2   $c1 $c2  $c3
+$c1 $c2    $c1 $c2    $c3
+$c3 $c1 $c2  $c3  $c1 $c2  $c3 
+$c3          
+`,
+    "X": `
+$c3          
+$c1 $c2  $c3    $c1 $c2  $c3
+$c3 $c1 $c2  $c3  $c1 $c2  $c3 
+$c3  $c1 $c2  $c1 $c2  $c3  
+$c3   $c1 $c2   $c3   
+$c3  $c1 $c2  $c1 $c2  $c3  
+$c3 $c1 $c2  $c3  $c1 $c2  $c3 
+$c1 $c2  $c3    $c1 $c2  $c3
+$c3          
+`,
+    "x": `
+$c3        
+$c3        
+$c3        
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3 $c1 $c2  $c1 $c2  $c3 
+$c3   $c2   $c3  
+$c3 $c1 $c2  $c1 $c2  $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3        
+`,
+    "Y": `
+$c3           
+$c1 $c2  $c3     $c1 $c2  $c3
+$c3 $c1 $c2  $c3   $c1 $c2  $c3 
+$c3  $c1 $c2  $c3 $c1 $c2  $c3  
+$c3   $c1 $c2    $c3   
+$c3    $c1 $c2  $c3    
+$c3    $c1 $c2  $c3    
+$c3    $c1 $c2  $c3    
+$c3           
+`,
+    "y": `
+$c3           
+$c3           
+$c3           
+$c1 $c2  $c3     $c1 $c2  $c3
+$c3 $c1 $c2  $c3   $c1 $c2  $c3 
+$c3  $c1 $c2  $c3 $c1 $c2  $c3  
+$c3   $c1 $c2    $c3   
+$c3    $c1 $c2  $c3    
+$c3   $c1 $c2  $c3     
+`,
+    "Z": `
+$c3         
+$c1 $c2        $c3
+$c3     $c1 $c2  $c3 
+$c3    $c1 $c2  $c3  
+$c3   $c1 $c2  $c3   
+$c3  $c1 $c2  $c3    
+$c3 $c1 $c2  $c3     
+$c1 $c2        $c3
+$c3         
+`,
+    "z": `
+$c3          
+$c3          
+$c3          
+$c1 $c2        $c3 
+$c3     $c1 $c2  $c3  
+$c3   $c1 $c2  $c3    
+$c3 $c1 $c2  $c3      
+$c1 $c2        $c3 
+$c3          
+`,
+    "~": `
+$c3             
+$c3             
+$c3             
+$c3  $c1 $c2    $c3   $c1 $c2  $c3
+$c3 $c1 $c2  $c3 $c1 $c2  $c3 $c1 $c2  $c3 
+$c1 $c2  $c3   $c1 $c2    $c3  
+$c3             
+$c3             
+$c3             
+`,
+    "`": `
+$c3    
+$c1 $c2  $c3 
+$c3 $c1 $c2  
+$c3    
+$c3    
+$c3    
+$c3    
+$c3    
+$c3    
+`,
+    "!": `
+$c3         
+$c3      $c1 $c2  $c3
+$c3     $c1 $c2  $c3 
+$c3    $c1 $c2  $c3  
+$c3   $c1 $c2  $c3   
+$c3  $c1 $c2  $c3    
+$c3         
+$c1 $c2  $c3      
+$c3         
+`,
+    "@": `
+$c3            
+$c3  $c1 $c2       $c3  
+$c3 $c1 $c2  $c3    $c1 $c2  $c3 
+$c1 $c2  $c3  $c1 $c2  $c3 $c1 $c2  $c3
+$c1 $c2  $c3 $c1 $c2  $c3  $c1 $c2  $c3
+$c1 $c2  $c3  $c1 $c2     $c3 
+$c3 $c1 $c2  $c3        
+$c3  $c1 $c2       $c3  
+$c3            
+`,
+    "#": `
+$c3           
+$c3  $c1 $c2  $c3 $c1 $c2  $c3  
+$c3  $c1 $c2  $c3 $c1 $c2  $c3  
+$c1 $c2          
+$c3  $c1 $c2  $c3 $c1 $c2  $c3  
+$c1 $c2          
+$c3  $c1 $c2  $c3 $c1 $c2  $c3  
+$c3  $c1 $c2  $c3 $c1 $c2  $c3  
+$c3           
+`,
+    "$": `
+$c3    $c1 $c2 $c3    
+$c3 $c1 $c2       $c3 
+$c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
+$c1 $c2  $c3 $c1 $c2 $c3    
+$c3 $c1 $c2       $c3 
+$c3    $c1 $c2 $c3 $c1 $c2  $c3
+$c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
+$c3 $c1 $c2       $c3 
+$c3    $c1 $c2 $c3    
+`,
+    "%": `
+$c3         
+$c1 $c2  $c3   $c1 $c2  
+$c3     $c1 $c2  $c3 
+$c3    $c1 $c2  $c3  
+$c3   $c1 $c2  $c3   
+$c3  $c1 $c2  $c3    
+$c3 $c1 $c2  $c3     
+$c1 $c2  $c3   $c1 $c2  
+$c3         
+`,
+    "^": `
+$c3        
+$c3        
+$c3  $c1 $c2   $c3  
+$c3 $c1 $c2  $c1 $c2  $c3 
+$c1 $c2  $c3  $c1 $c2  $c3
+$c3        
+$c3        
+$c3        
+$c3        
+`,
+    "&": `
+$c3           
+$c3  $c1 $c2    $c3    
+$c3 $c1 $c2  $c3 $c1 $c2  $c3   
+$c3  $c1 $c2    $c3    
+$c3 $c1 $c2  $c3 $c1 $c2  $c3   
+$c1 $c2  $c3   $c1 $c2  $c3  
+$c1 $c2  $c3    $c1 $c2  $c3 
+$c3 $c1 $c2      $c1 $c2  $c3
+$c3           
+`,
+    "*": `
+$c3     
+$c3     
+$c1 $c2 $c3 $c1 $c2 
+$c3 $c1 $c2  $c3 
+$c1 $c2 $c3 $c1 $c2 
+$c3     
+$c3     
+$c3     
+$c3     
+`,
+    "(": `
+$c3     
+$c3  $c1 $c2  $c3
+$c3 $c1 $c2  $c3 
+$c1 $c2  $c3  
+$c1 $c2  $c3  
+$c1 $c2  $c3  
+$c3 $c1 $c2  $c3 
+$c3  $c1 $c2  $c3
+$c3     
+`,
+    ")": `
+$c3     
+$c1 $c2  $c3  
+$c3 $c1 $c2  $c3 
+$c3  $c1 $c2  $c3
+$c3  $c1 $c2  $c3
+$c3  $c1 $c2  $c3
+$c3 $c1 $c2  $c3 
+$c1 $c2  $c3  
+$c3     
+`,
+    "_": `
+$c3         
+$c3         
+$c3         
+$c3         
+$c3         
+$c3         
+$c3         
+$c1 $c2        $c3
+$c3         
+`,
+    "-": `
+$c3         
+$c3         
+$c3         
+$c3         
+$c1 $c2        $c3
+$c3         
+$c3         
+$c3         
+$c3         
+`,
+    "+": `
+$c3         
+$c3         
+$c3   $c1 $c2  $c3   
+$c3   $c1 $c2  $c3   
+$c1 $c2        $c3
+$c3   $c1 $c2  $c3   
+$c3   $c1 $c2  $c3   
+$c3         
+$c3         
+`,
+    "=": `
+$c3         
+$c3         
+$c3         
+$c1 $c2        $c3
+$c3         
+$c1 $c2        $c3
+$c3         
+$c3         
+$c3         
+`,
+    "|": `
+$c3   
+$c1 $c2  $c3
+$c1 $c2  $c3
+$c1 $c2  $c3
+$c1 $c2  $c3
+$c1 $c2  $c3
+$c1 $c2  $c3
+$c1 $c2  $c3
+$c3   
+`,
+    "\\": `
+$c3         
+$c1 $c2  $c3      
+$c3 $c1 $c2  $c3     
+$c3  $c1 $c2  $c3    
+$c3   $c1 $c2  $c3   
+$c3    $c1 $c2  $c3  
+$c3     $c1 $c2  $c3 
+$c3      $c1 $c2  $c3
+$c3         
+`,
+    "[": `
+$c3     
+$c1 $c2    $c3
+$c1 $c2  $c3  
+$c1 $c2  $c3  
+$c1 $c2  $c3  
+$c1 $c2  $c3  
+$c1 $c2  $c3  
+$c1 $c2    $c3
+$c3     
+`,
+    "]": `
+$c3     
+$c1 $c2    $c3
+$c3  $c1 $c2  $c3
+$c3  $c1 $c2  $c3
+$c3  $c1 $c2  $c3
+$c3  $c1 $c2  $c3
+$c3  $c1 $c2  $c3
+$c1 $c2    $c3
+$c3     
+`,
+    "{": `
+$c3     
+$c3 $c1 $c2   $c3
+$c1 $c2  $c3  
+$c3 $c1 $c2  $c3 
+$c1 $c2  $c3  
+$c3 $c1 $c2  $c3 
+$c1 $c2  $c3  
+$c3 $c1 $c2   $c3
+$c3     
+`,
+    "}": `
+$c3     
+$c1 $c2   $c3 
+$c3  $c1 $c2  $c3
+$c3 $c1 $c2  $c3 
+$c3  $c1 $c2  $c3
+$c3 $c1 $c2  $c3 
+$c3  $c1 $c2  $c3
+$c1 $c2   $c3 
+$c3     
+`,
+    ":": `
+$c3     
+$c3     
+$c3     
+$c3 $c1 $c2  $c3 
+$c3     
+$c3     
+$c3 $c1 $c2  $c3 
+$c3     
+$c3     
+`,
+    ";": `
+$c3     
+$c3     
+$c3     
+$c3 $c1 $c2  $c3 
+$c3     
+$c3     
+$c3 $c1 $c2  $c3 
+$c3  $c1 $c2 $c3 
+$c3     
+`,
+    "'": `
+$c3    
+$c3 $c1 $c2  
+$c1 $c2  $c3 
+$c3    
+$c3    
+$c3    
+$c3    
+$c3    
+$c3    
+`,
+    '"': `
+$c3       
+$c1 $c2  $c3 $c1 $c2  $c3
+$c1 $c2  $c3 $c1 $c2  $c3
+$c3       
+$c3       
+$c3       
+$c3       
+$c3       
+$c3       
+`,
+    "<": `
+$c3       
+$c3       
+$c3    $c1 $c2  $c3
+$c3  $c1 $c2  $c3  
+$c1 $c2  $c3    
+$c3  $c1 $c2  $c3  
+$c3    $c1 $c2  $c3
+$c3       
+$c3       
+`,
+    ">": `
+$c3       
+$c3       
+$c1 $c2  $c3    
+$c3  $c1 $c2  $c3  
+$c3    $c1 $c2  $c3
+$c3  $c1 $c2  $c3  
+$c1 $c2  $c3    
+$c3       
+$c3       
+`,
+    "?": `
+$c3         
+$c3  $c1 $c2     $c3 
+$c3 $c1 $c2  $c3  $c1 $c2  
+$c3     $c1 $c2  $c3 
+$c3    $c1 $c2  $c3  
+$c3   $c1 $c2  $c3   
+$c3         
+$c3 $c1 $c2  $c3     
+$c3         
+`,
+    ",": `
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c1 $c2  $c3
+$c3 $c1 $c2 $c3
+`,
+    ".": `
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c1 $c2  
+$c3   
+`,
+    "/": `
+$c3         
+$c3      $c1 $c2  $c3
+$c3     $c1 $c2  $c3 
+$c3    $c1 $c2  $c3  
+$c3   $c1 $c2  $c3   
+$c3  $c1 $c2  $c3    
+$c3 $c1 $c2  $c3     
+$c1 $c2  $c3      
+$c3         
+`
+}

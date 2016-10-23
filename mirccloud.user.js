@@ -38,8 +38,34 @@
                 this.clear()
                 var self = this;
                 if (COMMANDS.indexOf(cmd) < 0) {
+                    console.log(args.length);
                     alias = localStorage.getItem(cmd);
-                    outputText = alias;
+                    if (alias.indexOf('&1') !== -1) {
+                        if (args.length > 0) {
+                            alias = alias.replace(/&1/g, args[0])
+                        } else {
+                            outputText = -1;
+                        }
+                    }
+                    if (alias.indexOf('&2') !== -1 && outputText != -1) {
+                        if (args.length > 1) {
+                            alias = alias.replace(/&2/g, args[1])
+                        } else {
+                            outputText = -1;
+                        }
+                    }
+                    if (alias.indexOf('&3') !== -1 && outputText != -1) {
+                        if (args.length > 2) {
+                            alias = alias.replace(/&3/g, args[2])
+                        } else {
+                            outputText = -1;
+                        }
+                    }
+                    console.log(outputText);
+                    if (outputText != -1) {
+                        console.log(outputText);
+                        outputText = alias;
+                    }
                 }
                 if (cmd == '/alias') {
                     var alias_name = '/' + args[0];
@@ -50,9 +76,9 @@
                     var randomColors = randomColorCode(true);
                     var r1 = randomColors[0];
                     var r2 = randomColors[1];
-                    var c2 = "" + r1 + "," + r1; 
-                    var c1 = "" + r2 + "," + r2; 
-                    var c3 = ""; 
+                    var c2 = "" + r1 + "," + r1;
+                    var c1 = "" + r2 + "," + r2;
+                    var c3 = "";
                     var buffer = [];
                     var strs = args;
                     for (i = 0; i < strs.length; i++) {
@@ -126,7 +152,7 @@
                 if (cmd == '/say') {
                     outputText = args.join(' ');
                 }
-                if (cmd != '/troll' && cmd != '/ascii' && cmd != '/hueg' && cmd != '/alias') {
+                if (cmd != '/troll' && cmd != '/ascii' && cmd != '/hueg' && cmd != '/alias' && outputText != false) {
                     if (colorFilter != false) {
                         var outputTextOld = outputText.slice(0);
                         var outputText = '';
@@ -257,1059 +283,1059 @@ const RST_CHOICES = {
 
 const HUEG_CHARS = {
     " ": `
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
-`,
+    $c3      
+    $c3      
+    $c3      
+    $c3      
+    $c3      
+    $c3      
+    $c3      
+    $c3      
+    $c3      
+    `,
     "\u5350": `
-$c3             
-$c1 $c2  $c3  $c1 $c2       $c3
-$c1 $c2  $c3  $c1 $c2  $c3     
-$c1 $c2  $c3  $c1 $c2  $c3     
-$c1 $c2            $c3
-$c3     $c1 $c2  $c3  $c1 $c2  $c3
-$c3     $c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2       $c3  $c1 $c2  $c3
-$c3             
-`,
+    $c3             
+    $c1 $c2  $c3  $c1 $c2       $c3
+    $c1 $c2  $c3  $c1 $c2  $c3     
+    $c1 $c2  $c3  $c1 $c2  $c3     
+    $c1 $c2            $c3
+    $c3     $c1 $c2  $c3  $c1 $c2  $c3
+    $c3     $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2       $c3  $c1 $c2  $c3
+    $c3             
+    `,
     "0": `
-$c3         
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3 $c1 $c2      $c3 
-$c3         
-`,
+    $c3         
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3 $c1 $c2      $c3 
+    $c3         
+    `,
     "1": `
-$c3       
-$c3  $c1 $c2  $c3  
-$c3 $c1 $c2   $c3  
-$c1 $c2    $c3  
-$c3  $c1 $c2  $c3  
-$c3  $c1 $c2  $c3  
-$c3  $c1 $c2  $c3  
-$c1 $c2      $c3
-$c3       
-`,
+    $c3       
+    $c3  $c1 $c2  $c3  
+    $c3 $c1 $c2   $c3  
+    $c1 $c2    $c3  
+    $c3  $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3  
+    $c1 $c2      $c3
+    $c3       
+    `,
     "2": `
-$c3        
-$c3 $c1 $c2     $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3    $c1 $c2  $c3 
-$c3   $c1 $c2  $c3  
-$c3  $c1 $c2  $c3   
-$c3 $c1 $c2  $c3    
-$c1 $c2       $c3
-$c3        
-`,
+    $c3        
+    $c3 $c1 $c2     $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3    $c1 $c2  $c3 
+    $c3   $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3   
+    $c3 $c1 $c2  $c3    
+    $c1 $c2       $c3
+    $c3        
+    `,
     "3": `
-$c3        
-$c3 $c1 $c2     $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3     $c1 $c2  $c3
-$c3   $c1 $c2   $c3 
-$c3     $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3 $c1 $c2     $c3 
-$c3        
-`,
+    $c3        
+    $c3 $c1 $c2     $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3     $c1 $c2  $c3
+    $c3   $c1 $c2   $c3 
+    $c3     $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3 $c1 $c2     $c3 
+    $c3        
+    `,
     "4": `
-$c3        
-$c3    $c1 $c2  $c3 
-$c3   $c1 $c2   $c3 
-$c3  $c1 $c2 $c1 $c2  $c3 
-$c3 $c1 $c2 $c3 $c1 $c2  $c3 
-$c1 $c2       $c3
-$c3    $c1 $c2  $c3 
-$c3    $c1 $c2  $c3 
-$c3        
-`,
+    $c3        
+    $c3    $c1 $c2  $c3 
+    $c3   $c1 $c2   $c3 
+    $c3  $c1 $c2 $c1 $c2  $c3 
+    $c3 $c1 $c2 $c3 $c1 $c2  $c3 
+    $c1 $c2       $c3
+    $c3    $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3 
+    $c3        
+    `,
     "5": `
-$c3        
-$c1 $c2      $c3 
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2      $c3 
-$c3     $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3 $c1 $c2     $c3 
-$c3        
-`,
+    $c3        
+    $c1 $c2      $c3 
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2      $c3 
+    $c3     $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3 $c1 $c2     $c3 
+    $c3        
+    `,
     "6": `
-$c3        
-$c3   $c1 $c2  $c3  
-$c3  $c1 $c2  $c3   
-$c3 $c1 $c2  $c3    
-$c1 $c2      $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3 $c1 $c2     $c3 
-$c3        
-`,
+    $c3        
+    $c3   $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3   
+    $c3 $c1 $c2  $c3    
+    $c1 $c2      $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3 $c1 $c2     $c3 
+    $c3        
+    `,
     "7": `
-$c3         
-$c1 $c2        $c3
-$c3      $c1 $c2  $c3
-$c3     $c1 $c2  $c3 
-$c3    $c1 $c2  $c3  
-$c3   $c1 $c2  $c3   
-$c3  $c1 $c2  $c3    
-$c3 $c1 $c2  $c3     
-$c3         
-`,
+    $c3         
+    $c1 $c2        $c3
+    $c3      $c1 $c2  $c3
+    $c3     $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3  
+    $c3   $c1 $c2  $c3   
+    $c3  $c1 $c2  $c3    
+    $c3 $c1 $c2  $c3     
+    $c3         
+    `,
     "8": `
-$c3         
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3 $c1 $c2      $c3 
-$c3         
-`,
+    $c3         
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3 $c1 $c2      $c3 
+    $c3         
+    `,
     "9": `
-$c3        
-$c3 $c1 $c2     $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3 $c1 $c2      $c3
-$c3    $c1 $c2  $c3 
-$c3   $c1 $c2  $c3  
-$c3  $c1 $c2  $c3   
-$c3        
-`,
+    $c3        
+    $c3 $c1 $c2     $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3 $c1 $c2      $c3
+    $c3    $c1 $c2  $c3 
+    $c3   $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3   
+    $c3        
+    `,
     "A": `
-$c3        
-$c3  $c1 $c2   $c3  
-$c3 $c1 $c2  $c1 $c2  $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2       $c3
-$c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3        
-`,
+    $c3        
+    $c3  $c1 $c2   $c3  
+    $c3 $c1 $c2  $c1 $c2  $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2       $c3
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3        
+    `,
     "a": `
-$c3         
-$c3         
-$c3         
-$c3 $c1 $c2     $c3  
-$c3     $c1 $c2  $c3 
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3  $c1 $c2  $c3 
-$c3 $c1 $c2       $c3
-$c3         
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c3 $c1 $c2     $c3  
+    $c3     $c1 $c2  $c3 
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3 
+    $c3 $c1 $c2       $c3
+    $c3         
+    `,
     "B": `
-$c3         
-$c1 $c2       $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2       $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2       $c3 
-$c3         
-`,
+    $c3         
+    $c1 $c2       $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2       $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2       $c3 
+    $c3         
+    `,
     "b": `
-$c3         
-$c1 $c2  $c3      
-$c1 $c2  $c3      
-$c1 $c2      $c3  
-$c1 $c2  $c3  $c1 $c2  $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2  $c3 
-$c1 $c2      $c3  
-$c3         
-`,
+    $c3         
+    $c1 $c2  $c3      
+    $c1 $c2  $c3      
+    $c1 $c2      $c3  
+    $c1 $c2  $c3  $c1 $c2  $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2  $c3 
+    $c1 $c2      $c3  
+    $c3         
+    `,
     "C": `
-$c3         
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3      
-$c1 $c2  $c3      
-$c1 $c2  $c3      
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3 $c1 $c2      $c3 
-$c3         
-`,
+    $c3         
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3      
+    $c1 $c2  $c3      
+    $c1 $c2  $c3      
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3 $c1 $c2      $c3 
+    $c3         
+    `,
     "c": `
-$c3        
-$c3        
-$c3        
-$c3  $c1 $c2     $c3
-$c3 $c1 $c2  $c3    
-$c1 $c2  $c3     
-$c3 $c1 $c2  $c3    
-$c3  $c1 $c2     $c3
-$c3        
-`,
+    $c3        
+    $c3        
+    $c3        
+    $c3  $c1 $c2     $c3
+    $c3 $c1 $c2  $c3    
+    $c1 $c2  $c3     
+    $c3 $c1 $c2  $c3    
+    $c3  $c1 $c2     $c3
+    $c3        
+    `,
     "D": `
-$c3          
-$c1 $c2       $c3  
-$c1 $c2  $c3   $c1 $c2  $c3 
-$c1 $c2  $c3    $c1 $c2  $c3
-$c1 $c2  $c3    $c1 $c2  $c3
-$c1 $c2  $c3    $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3 
-$c1 $c2       $c3  
-$c3          
-`,
+    $c3          
+    $c1 $c2       $c3  
+    $c1 $c2  $c3   $c1 $c2  $c3 
+    $c1 $c2  $c3    $c1 $c2  $c3
+    $c1 $c2  $c3    $c1 $c2  $c3
+    $c1 $c2  $c3    $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3 
+    $c1 $c2       $c3  
+    $c3          
+    `,
     "d": `
-$c3         
-$c3      $c1 $c2  $c3
-$c3      $c1 $c2  $c3
-$c3  $c1 $c2      $c3
-$c3 $c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3 $c1 $c2  $c3  $c1 $c2  $c3
-$c3  $c1 $c2      $c3
-$c3         
-`,
+    $c3         
+    $c3      $c1 $c2  $c3
+    $c3      $c1 $c2  $c3
+    $c3  $c1 $c2      $c3
+    $c3 $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3 $c1 $c2  $c3  $c1 $c2  $c3
+    $c3  $c1 $c2      $c3
+    $c3         
+    `,
     "E": `
-$c3        
-$c1 $c2       $c3
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2      $c3 
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2       $c3
-$c3        
-`,
+    $c3        
+    $c1 $c2       $c3
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2      $c3 
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2       $c3
+    $c3        
+    `,
     "e": `
-$c3         
-$c3         
-$c3         
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  
-$c1 $c2       $c3 
-$c1 $c2  $c3      
-$c3 $c1 $c2      $c3 
-$c3         
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  
+    $c1 $c2       $c3 
+    $c1 $c2  $c3      
+    $c3 $c1 $c2      $c3 
+    $c3         
+    `,
     "F": `
-$c3        
-$c1 $c2       
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2      $c3 
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c3        
-`,
+    $c3        
+    $c1 $c2       
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2      $c3 
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c3        
+    `,
     "f": `
-$c3      
-$c3      
-$c3  $c1 $c2   
-$c3 $c1 $c2  $c3  
-$c1 $c2     
-$c3 $c1 $c2  $c3  
-$c3 $c1 $c2  $c3  
-$c3 $c1 $c2  $c3  
-$c3      
-`,
+    $c3      
+    $c3      
+    $c3  $c1 $c2   
+    $c3 $c1 $c2  $c3  
+    $c1 $c2     
+    $c3 $c1 $c2  $c3  
+    $c3 $c1 $c2  $c3  
+    $c3 $c1 $c2  $c3  
+    $c3      
+    `,
     "G": `
-$c3          
-$c3  $c1 $c2      $c3 
-$c3 $c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3       
-$c1 $c2  $c3  $c1 $c2    $c3
-$c1 $c2  $c3    $c1 $c2  $c3
-$c3 $c1 $c2  $c3   $c1 $c2  $c3
-$c3  $c1 $c2      $c3 
-$c3          
-`,
+    $c3          
+    $c3  $c1 $c2      $c3 
+    $c3 $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3       
+    $c1 $c2  $c3  $c1 $c2    $c3
+    $c1 $c2  $c3    $c1 $c2  $c3
+    $c3 $c1 $c2  $c3   $c1 $c2  $c3
+    $c3  $c1 $c2      $c3 
+    $c3          
+    `,
     "g": `
-$c3         
-$c3         
-$c3         
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3 $c1 $c2       $c3
-$c3      $c1 $c2  $c3
-$c3 $c1 $c2      $c3 
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3 $c1 $c2       $c3
+    $c3      $c1 $c2  $c3
+    $c3 $c1 $c2      $c3 
+    `,
     "H": `
-$c3         
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2        $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3         
-`,
+    $c3         
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2        $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3         
+    `,
     "h": `
-$c3         
-$c1 $c2  $c3      
-$c1 $c2  $c3      
-$c1 $c2       $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3         
-`,
+    $c3         
+    $c1 $c2  $c3      
+    $c1 $c2  $c3      
+    $c1 $c2       $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3         
+    `,
     "I": `
-$c3       
-$c1 $c2      $c3
-$c3  $c1 $c2  $c3  
-$c3  $c1 $c2  $c3  
-$c3  $c1 $c2  $c3  
-$c3  $c1 $c2  $c3  
-$c3  $c1 $c2  $c3  
-$c1 $c2      $c3
-$c3       
-`,
+    $c3       
+    $c1 $c2      $c3
+    $c3  $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3  
+    $c1 $c2      $c3
+    $c3       
+    `,
     "i": `
-$c3     
-$c3 $c1 $c2  $c3 
-$c3     
-$c1 $c2   $c3 
-$c3 $c1 $c2  $c3 
-$c3 $c1 $c2  $c3 
-$c3 $c1 $c2  $c3 
-$c1 $c2    
-$c3     
-`,
+    $c3     
+    $c3 $c1 $c2  $c3 
+    $c3     
+    $c1 $c2   $c3 
+    $c3 $c1 $c2  $c3 
+    $c3 $c1 $c2  $c3 
+    $c3 $c1 $c2  $c3 
+    $c1 $c2    
+    $c3     
+    `,
     "J": `
-$c3        
-$c3 $c1 $c2      
-$c3    $c1 $c2  $c3 
-$c3    $c1 $c2  $c3 
-$c3    $c1 $c2  $c3 
-$c3    $c1 $c2  $c3 
-$c1 $c2  $c3 $c1 $c2  $c3 
-$c3 $c1 $c2    $c3  
-$c3        
-`,
+    $c3        
+    $c3 $c1 $c2      
+    $c3    $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3 
+    $c1 $c2  $c3 $c1 $c2  $c3 
+    $c3 $c1 $c2    $c3  
+    $c3        
+    `,
     "j": `
-$c3       
-$c3    $c1 $c2  
-$c3       
-$c3   $c1 $c2   
-$c3    $c1 $c2  
-$c3    $c1 $c2  
-$c3    $c1 $c2  
-$c1 $c2  $c3 $c1 $c2  
-$c3 $c1 $c2    $c3 
-`,
+    $c3       
+    $c3    $c1 $c2  
+    $c3       
+    $c3   $c1 $c2   
+    $c3    $c1 $c2  
+    $c3    $c1 $c2  
+    $c3    $c1 $c2  
+    $c1 $c2  $c3 $c1 $c2  
+    $c3 $c1 $c2    $c3 
+    `,
     "K": `
-$c3        
-$c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2  $c3 $c1 $c2  $c3 
-$c1 $c2  $c1 $c2  $c3  
-$c1 $c2    $c3   
-$c1 $c2  $c1 $c2  $c3  
-$c1 $c2  $c3 $c1 $c2  $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3        
-`,
+    $c3        
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2  $c3 $c1 $c2  $c3 
+    $c1 $c2  $c1 $c2  $c3  
+    $c1 $c2    $c3   
+    $c1 $c2  $c1 $c2  $c3  
+    $c1 $c2  $c3 $c1 $c2  $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3        
+    `,
     "k": `
-$c3        
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2  $c3  $c1 $c2  
-$c1 $c2  $c3 $c1 $c2  $c3 
-$c1 $c2     $c3  
-$c1 $c2  $c3 $c1 $c2  $c3 
-$c1 $c2  $c3  $c1 $c2  
-$c3        
-`,
+    $c3        
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2  $c3  $c1 $c2  
+    $c1 $c2  $c3 $c1 $c2  $c3 
+    $c1 $c2     $c3  
+    $c1 $c2  $c3 $c1 $c2  $c3 
+    $c1 $c2  $c3  $c1 $c2  
+    $c3        
+    `,
     "L": `
-$c3        
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2       $c3
-$c3        
-`,
+    $c3        
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2       $c3
+    $c3        
+    `,
     "l": `
-$c3     
-$c1 $c2   $c3 
-$c3 $c1 $c2  $c3 
-$c3 $c1 $c2  $c3 
-$c3 $c1 $c2  $c3 
-$c3 $c1 $c2  $c3 
-$c3 $c1 $c2  $c3 
-$c1 $c2    
-$c3     
-`,
+    $c3     
+    $c1 $c2   $c3 
+    $c3 $c1 $c2  $c3 
+    $c3 $c1 $c2  $c3 
+    $c3 $c1 $c2  $c3 
+    $c3 $c1 $c2  $c3 
+    $c3 $c1 $c2  $c3 
+    $c1 $c2    
+    $c3     
+    `,
     "M": `
-$c3            
-$c1 $c2  $c3      $c1 $c2  $c3
-$c1 $c2   $c3    $c1 $c2   $c3
-$c1 $c2    $c3  $c1 $c2    $c3
-$c1 $c2  $c1 $c2  $c1 $c2  $c1 $c2  $c3
-$c1 $c2  $c3 $c1 $c2   $c3 $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2 $c3  $c1 $c2  $c3
-$c1 $c2  $c3      $c1 $c2  $c3
-$c3            
-`,
+    $c3            
+    $c1 $c2  $c3      $c1 $c2  $c3
+    $c1 $c2   $c3    $c1 $c2   $c3
+    $c1 $c2    $c3  $c1 $c2    $c3
+    $c1 $c2  $c1 $c2  $c1 $c2  $c1 $c2  $c3
+    $c1 $c2  $c3 $c1 $c2   $c3 $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2 $c3  $c1 $c2  $c3
+    $c1 $c2  $c3      $c1 $c2  $c3
+    $c3            
+    `,
     "m": `
-$c3          
-$c3          
-$c3          
-$c3 $c1 $c2  $c3  $c1 $c2  $c3 
-$c1 $c2    $c1 $c2    $c3
-$c1 $c2  $c1 $c2   $c1 $c2  $c3
-$c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
-$c1 $c2  $c3    $c1 $c2  $c3
-$c3          
-`,
+    $c3          
+    $c3          
+    $c3          
+    $c3 $c1 $c2  $c3  $c1 $c2  $c3 
+    $c1 $c2    $c1 $c2    $c3
+    $c1 $c2  $c1 $c2   $c1 $c2  $c3
+    $c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
+    $c1 $c2  $c3    $c1 $c2  $c3
+    $c3          
+    `,
     "N": `
-$c3           
-$c1 $c2   $c3    $c1 $c2  
-$c1 $c2    $c3   $c1 $c2  
-$c1 $c2  $c1 $c2  $c3  $c1 $c2  
-$c1 $c2  $c3 $c1 $c2  $c3 $c1 $c2  
-$c1 $c2  $c3  $c1 $c2  $c1 $c2  
-$c1 $c2  $c3   $c1 $c2    
-$c1 $c2  $c3    $c1 $c2   
-$c3           
-`,
+    $c3           
+    $c1 $c2   $c3    $c1 $c2  
+    $c1 $c2    $c3   $c1 $c2  
+    $c1 $c2  $c1 $c2  $c3  $c1 $c2  
+    $c1 $c2  $c3 $c1 $c2  $c3 $c1 $c2  
+    $c1 $c2  $c3  $c1 $c2  $c1 $c2  
+    $c1 $c2  $c3   $c1 $c2    
+    $c1 $c2  $c3    $c1 $c2   
+    $c3           
+    `,
     "n": `
-$c3         
-$c3         
-$c3         
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3         
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3         
+    `,
     "O": `
-$c3           
-$c3  $c1 $c2      $c3  
-$c3 $c1 $c2  $c3   $c1 $c2  $c3 
-$c1 $c2  $c3     $c1 $c2  $c3
-$c1 $c2  $c3     $c1 $c2  $c3
-$c1 $c2  $c3     $c1 $c2  $c3
-$c3 $c1 $c2  $c3   $c1 $c2  $c3 
-$c3  $c1 $c2      $c3  
-$c3           
-`,
+    $c3           
+    $c3  $c1 $c2      $c3  
+    $c3 $c1 $c2  $c3   $c1 $c2  $c3 
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c3 $c1 $c2  $c3   $c1 $c2  $c3 
+    $c3  $c1 $c2      $c3  
+    $c3           
+    `,
     "o": `
-$c3         
-$c3         
-$c3         
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3 $c1 $c2      $c3 
-$c3         
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3 $c1 $c2      $c3 
+    $c3         
+    `,
     "P": `
-$c3         
-$c1 $c2       $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2       $c3 
-$c1 $c2  $c3      
-$c1 $c2  $c3      
-$c1 $c2  $c3      
-$c3         
-`,
+    $c3         
+    $c1 $c2       $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2       $c3 
+    $c1 $c2  $c3      
+    $c1 $c2  $c3      
+    $c1 $c2  $c3      
+    $c3         
+    `,
     "p": `
-$c3         
-$c3         
-$c3         
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2       $c3 
-$c1 $c2  $c3      
-$c1 $c2  $c3      
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2       $c3 
+    $c1 $c2  $c3      
+    $c1 $c2  $c3      
+    `,
     "Q": `
-$c3           
-$c3  $c1 $c2      $c3  
-$c3 $c1 $c2  $c3   $c1 $c2  $c3 
-$c1 $c2  $c3     $c1 $c2  $c3
-$c1 $c2  $c3     $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2  $c1 $c2  $c3
-$c3 $c1 $c2  $c3  $c1 $c2   $c3 
-$c3  $c1 $c2      $c3  
-$c3       $c1 $c2  $c3 
-`,
+    $c3           
+    $c3  $c1 $c2      $c3  
+    $c3 $c1 $c2  $c3   $c1 $c2  $c3 
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2  $c1 $c2  $c3
+    $c3 $c1 $c2  $c3  $c1 $c2   $c3 
+    $c3  $c1 $c2      $c3  
+    $c3       $c1 $c2  $c3 
+    `,
     "q": `
-$c3         
-$c3         
-$c3         
-$c3 $c1 $c2      $c3 
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3 $c1 $c2       $c3
-$c3      $c1 $c2  $c3
-$c3      $c1 $c2  $c3
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c3 $c1 $c2      $c3 
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3 $c1 $c2       $c3
+    $c3      $c1 $c2  $c3
+    $c3      $c1 $c2  $c3
+    `,
     "R": `
-$c3           
-$c1 $c2       $c3   
-$c1 $c2  $c3   $c1 $c2  $c3  
-$c1 $c2  $c3   $c1 $c2  $c3  
-$c1 $c2       $c3   
-$c1 $c2  $c3   $c1 $c2  $c3  
-$c1 $c2  $c3    $c1 $c2  $c3 
-$c1 $c2  $c3     $c1 $c2  
-$c3           
-`,
+    $c3           
+    $c1 $c2       $c3   
+    $c1 $c2  $c3   $c1 $c2  $c3  
+    $c1 $c2  $c3   $c1 $c2  $c3  
+    $c1 $c2       $c3   
+    $c1 $c2  $c3   $c1 $c2  $c3  
+    $c1 $c2  $c3    $c1 $c2  $c3 
+    $c1 $c2  $c3     $c1 $c2  
+    $c3           
+    `,
     "r": `
-$c3        
-$c3        
-$c3        
-$c3 $c1 $c2     $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c1 $c2  $c3     
-$c3        
-`,
+    $c3        
+    $c3        
+    $c3        
+    $c3 $c1 $c2     $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c1 $c2  $c3     
+    $c3        
+    `,
     "S": `
-$c3        
-$c3 $c1 $c2     $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2  $c3     
-$c3 $c1 $c2     $c3 
-$c3     $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3 $c1 $c2     $c3 
-$c3        
-`,
+    $c3        
+    $c3 $c1 $c2     $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2  $c3     
+    $c3 $c1 $c2     $c3 
+    $c3     $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3 $c1 $c2     $c3 
+    $c3        
+    `,
     "s": `
-$c3       
-$c3       
-$c3       
-$c3 $c1 $c2     $c3
-$c1 $c2  $c3    
-$c3 $c1 $c2    $c3 
-$c3    $c1 $c2  $c3
-$c1 $c2     $c3 
-$c3       
-`,
+    $c3       
+    $c3       
+    $c3       
+    $c3 $c1 $c2     $c3
+    $c1 $c2  $c3    
+    $c3 $c1 $c2    $c3 
+    $c3    $c1 $c2  $c3
+    $c1 $c2     $c3 
+    $c3       
+    `,
     "T": `
-$c3         
-$c1 $c2        $c3
-$c3   $c1 $c2  $c3   
-$c3   $c1 $c2  $c3   
-$c3   $c1 $c2  $c3   
-$c3   $c1 $c2  $c3   
-$c3   $c1 $c2  $c3   
-$c3   $c1 $c2  $c3   
-$c3         
-`,
+    $c3         
+    $c1 $c2        $c3
+    $c3   $c1 $c2  $c3   
+    $c3   $c1 $c2  $c3   
+    $c3   $c1 $c2  $c3   
+    $c3   $c1 $c2  $c3   
+    $c3   $c1 $c2  $c3   
+    $c3   $c1 $c2  $c3   
+    $c3         
+    `,
     "t": `
-$c3       
-$c3       
-$c3 $c1 $c2  $c3   
-$c1 $c2     $c3 
-$c3 $c1 $c2  $c3   
-$c3 $c1 $c2  $c3   
-$c3 $c1 $c2  $c1 $c2  
-$c3  $c1 $c2   $c3 
-$c3       
-`,
+    $c3       
+    $c3       
+    $c3 $c1 $c2  $c3   
+    $c1 $c2     $c3 
+    $c3 $c1 $c2  $c3   
+    $c3 $c1 $c2  $c3   
+    $c3 $c1 $c2  $c1 $c2  
+    $c3  $c1 $c2   $c3 
+    $c3       
+    `,
     "U": `
-$c3           
-$c1 $c2  $c3     $c1 $c2  $c3
-$c1 $c2  $c3     $c1 $c2  $c3
-$c1 $c2  $c3     $c1 $c2  $c3
-$c1 $c2  $c3     $c1 $c2  $c3
-$c1 $c2  $c3     $c1 $c2  $c3
-$c3 $c1 $c2  $c3   $c1 $c2  $c3 
-$c3  $c1 $c2      $c3  
-$c3           
-`,
+    $c3           
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c3 $c1 $c2  $c3   $c1 $c2  $c3 
+    $c3  $c1 $c2      $c3  
+    $c3           
+    `,
     "u": `
-$c3         
-$c3         
-$c3         
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c1 $c2  $c3   $c1 $c2  $c3
-$c3 $c1 $c2      $c3 
-$c3         
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c1 $c2  $c3   $c1 $c2  $c3
+    $c3 $c1 $c2      $c3 
+    $c3         
+    `,
     "V": `
-$c3             
-$c1 $c2 $c3         $c1 $c2 
-$c1 $c2  $c3       $c1 $c2  
-$c3 $c1 $c2  $c3     $c1 $c2  $c3 
-$c3  $c1 $c2  $c3   $c1 $c2  $c3  
-$c3   $c1 $c2  $c3 $c1 $c2  $c3   
-$c3    $c1 $c2    $c3    
-$c3     $c1 $c2  $c3     
-$c3             
-`,
+    $c3             
+    $c1 $c2 $c3         $c1 $c2 
+    $c1 $c2  $c3       $c1 $c2  
+    $c3 $c1 $c2  $c3     $c1 $c2  $c3 
+    $c3  $c1 $c2  $c3   $c1 $c2  $c3  
+    $c3   $c1 $c2  $c3 $c1 $c2  $c3   
+    $c3    $c1 $c2    $c3    
+    $c3     $c1 $c2  $c3     
+    $c3             
+    `,
     "v": `
-$c3            
-$c3            
-$c3            
-$c1 $c2  $c3      $c1 $c2  
-$c3 $c1 $c2  $c3    $c1 $c2  $c3 
-$c3  $c1 $c2  $c3  $c1 $c2  $c3  
-$c3   $c1 $c2  $c1 $c2  $c3   
-$c3    $c1 $c2   $c3    
-$c3            
-`,
+    $c3            
+    $c3            
+    $c3            
+    $c1 $c2  $c3      $c1 $c2  
+    $c3 $c1 $c2  $c3    $c1 $c2  $c3 
+    $c3  $c1 $c2  $c3  $c1 $c2  $c3  
+    $c3   $c1 $c2  $c1 $c2  $c3   
+    $c3    $c1 $c2   $c3    
+    $c3            
+    `,
     "W": `
-$c3           
-$c1 $c2  $c3     $c1 $c2  
-$c1 $c2  $c3     $c1 $c2  
-$c1 $c2  $c3     $c1 $c2  
-$c1 $c2  $c3 $c1 $c2  $c3 $c1 $c2  
-$c1 $c2  $c1 $c2    $c1 $c2  
-$c1 $c2    $c3 $c1 $c2    
-$c3 $c1 $c2  $c3   $c1 $c2  $c3 
-$c3           
-`,
+    $c3           
+    $c1 $c2  $c3     $c1 $c2  
+    $c1 $c2  $c3     $c1 $c2  
+    $c1 $c2  $c3     $c1 $c2  
+    $c1 $c2  $c3 $c1 $c2  $c3 $c1 $c2  
+    $c1 $c2  $c1 $c2    $c1 $c2  
+    $c1 $c2    $c3 $c1 $c2    
+    $c3 $c1 $c2  $c3   $c1 $c2  $c3 
+    $c3           
+    `,
     "w": `
-$c3          
-$c3          
-$c3          
-$c1 $c2  $c3    $c1 $c2  $c3
-$c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
-$c1 $c2  $c1 $c2   $c1 $c2  $c3
-$c1 $c2    $c1 $c2    $c3
-$c3 $c1 $c2  $c3  $c1 $c2  $c3 
-$c3          
-`,
+    $c3          
+    $c3          
+    $c3          
+    $c1 $c2  $c3    $c1 $c2  $c3
+    $c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
+    $c1 $c2  $c1 $c2   $c1 $c2  $c3
+    $c1 $c2    $c1 $c2    $c3
+    $c3 $c1 $c2  $c3  $c1 $c2  $c3 
+    $c3          
+    `,
     "X": `
-$c3          
-$c1 $c2  $c3    $c1 $c2  $c3
-$c3 $c1 $c2  $c3  $c1 $c2  $c3 
-$c3  $c1 $c2  $c1 $c2  $c3  
-$c3   $c1 $c2   $c3   
-$c3  $c1 $c2  $c1 $c2  $c3  
-$c3 $c1 $c2  $c3  $c1 $c2  $c3 
-$c1 $c2  $c3    $c1 $c2  $c3
-$c3          
-`,
+    $c3          
+    $c1 $c2  $c3    $c1 $c2  $c3
+    $c3 $c1 $c2  $c3  $c1 $c2  $c3 
+    $c3  $c1 $c2  $c1 $c2  $c3  
+    $c3   $c1 $c2   $c3   
+    $c3  $c1 $c2  $c1 $c2  $c3  
+    $c3 $c1 $c2  $c3  $c1 $c2  $c3 
+    $c1 $c2  $c3    $c1 $c2  $c3
+    $c3          
+    `,
     "x": `
-$c3        
-$c3        
-$c3        
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3 $c1 $c2  $c1 $c2  $c3 
-$c3   $c2   $c3  
-$c3 $c1 $c2  $c1 $c2  $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3        
-`,
+    $c3        
+    $c3        
+    $c3        
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3 $c1 $c2  $c1 $c2  $c3 
+    $c3   $c2   $c3  
+    $c3 $c1 $c2  $c1 $c2  $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3        
+    `,
     "Y": `
-$c3           
-$c1 $c2  $c3     $c1 $c2  $c3
-$c3 $c1 $c2  $c3   $c1 $c2  $c3 
-$c3  $c1 $c2  $c3 $c1 $c2  $c3  
-$c3   $c1 $c2    $c3   
-$c3    $c1 $c2  $c3    
-$c3    $c1 $c2  $c3    
-$c3    $c1 $c2  $c3    
-$c3           
-`,
+    $c3           
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c3 $c1 $c2  $c3   $c1 $c2  $c3 
+    $c3  $c1 $c2  $c3 $c1 $c2  $c3  
+    $c3   $c1 $c2    $c3   
+    $c3    $c1 $c2  $c3    
+    $c3    $c1 $c2  $c3    
+    $c3    $c1 $c2  $c3    
+    $c3           
+    `,
     "y": `
-$c3           
-$c3           
-$c3           
-$c1 $c2  $c3     $c1 $c2  $c3
-$c3 $c1 $c2  $c3   $c1 $c2  $c3 
-$c3  $c1 $c2  $c3 $c1 $c2  $c3  
-$c3   $c1 $c2    $c3   
-$c3    $c1 $c2  $c3    
-$c3   $c1 $c2  $c3     
-`,
+    $c3           
+    $c3           
+    $c3           
+    $c1 $c2  $c3     $c1 $c2  $c3
+    $c3 $c1 $c2  $c3   $c1 $c2  $c3 
+    $c3  $c1 $c2  $c3 $c1 $c2  $c3  
+    $c3   $c1 $c2    $c3   
+    $c3    $c1 $c2  $c3    
+    $c3   $c1 $c2  $c3     
+    `,
     "Z": `
-$c3         
-$c1 $c2        $c3
-$c3     $c1 $c2  $c3 
-$c3    $c1 $c2  $c3  
-$c3   $c1 $c2  $c3   
-$c3  $c1 $c2  $c3    
-$c3 $c1 $c2  $c3     
-$c1 $c2        $c3
-$c3         
-`,
+    $c3         
+    $c1 $c2        $c3
+    $c3     $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3  
+    $c3   $c1 $c2  $c3   
+    $c3  $c1 $c2  $c3    
+    $c3 $c1 $c2  $c3     
+    $c1 $c2        $c3
+    $c3         
+    `,
     "z": `
-$c3          
-$c3          
-$c3          
-$c1 $c2        $c3 
-$c3     $c1 $c2  $c3  
-$c3   $c1 $c2  $c3    
-$c3 $c1 $c2  $c3      
-$c1 $c2        $c3 
-$c3          
-`,
+    $c3          
+    $c3          
+    $c3          
+    $c1 $c2        $c3 
+    $c3     $c1 $c2  $c3  
+    $c3   $c1 $c2  $c3    
+    $c3 $c1 $c2  $c3      
+    $c1 $c2        $c3 
+    $c3          
+    `,
     "~": `
-$c3             
-$c3             
-$c3             
-$c3  $c1 $c2    $c3   $c1 $c2  $c3
-$c3 $c1 $c2  $c3 $c1 $c2  $c3 $c1 $c2  $c3 
-$c1 $c2  $c3   $c1 $c2    $c3  
-$c3             
-$c3             
-$c3             
-`,
+    $c3             
+    $c3             
+    $c3             
+    $c3  $c1 $c2    $c3   $c1 $c2  $c3
+    $c3 $c1 $c2  $c3 $c1 $c2  $c3 $c1 $c2  $c3 
+    $c1 $c2  $c3   $c1 $c2    $c3  
+    $c3             
+    $c3             
+    $c3             
+    `,
     "`": `
-$c3    
-$c1 $c2  $c3 
-$c3 $c1 $c2  
-$c3    
-$c3    
-$c3    
-$c3    
-$c3    
-$c3    
-`,
+    $c3    
+    $c1 $c2  $c3 
+    $c3 $c1 $c2  
+    $c3    
+    $c3    
+    $c3    
+    $c3    
+    $c3    
+    $c3    
+    `,
     "!": `
-$c3         
-$c3      $c1 $c2  $c3
-$c3     $c1 $c2  $c3 
-$c3    $c1 $c2  $c3  
-$c3   $c1 $c2  $c3   
-$c3  $c1 $c2  $c3    
-$c3         
-$c1 $c2  $c3      
-$c3         
-`,
+    $c3         
+    $c3      $c1 $c2  $c3
+    $c3     $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3  
+    $c3   $c1 $c2  $c3   
+    $c3  $c1 $c2  $c3    
+    $c3         
+    $c1 $c2  $c3      
+    $c3         
+    `,
     "@": `
-$c3            
-$c3  $c1 $c2       $c3  
-$c3 $c1 $c2  $c3    $c1 $c2  $c3 
-$c1 $c2  $c3  $c1 $c2  $c3 $c1 $c2  $c3
-$c1 $c2  $c3 $c1 $c2  $c3  $c1 $c2  $c3
-$c1 $c2  $c3  $c1 $c2     $c3 
-$c3 $c1 $c2  $c3        
-$c3  $c1 $c2       $c3  
-$c3            
-`,
+    $c3            
+    $c3  $c1 $c2       $c3  
+    $c3 $c1 $c2  $c3    $c1 $c2  $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3 $c1 $c2  $c3
+    $c1 $c2  $c3 $c1 $c2  $c3  $c1 $c2  $c3
+    $c1 $c2  $c3  $c1 $c2     $c3 
+    $c3 $c1 $c2  $c3        
+    $c3  $c1 $c2       $c3  
+    $c3            
+    `,
     "#": `
-$c3           
-$c3  $c1 $c2  $c3 $c1 $c2  $c3  
-$c3  $c1 $c2  $c3 $c1 $c2  $c3  
-$c1 $c2          
-$c3  $c1 $c2  $c3 $c1 $c2  $c3  
-$c1 $c2          
-$c3  $c1 $c2  $c3 $c1 $c2  $c3  
-$c3  $c1 $c2  $c3 $c1 $c2  $c3  
-$c3           
-`,
+    $c3           
+    $c3  $c1 $c2  $c3 $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3 $c1 $c2  $c3  
+    $c1 $c2          
+    $c3  $c1 $c2  $c3 $c1 $c2  $c3  
+    $c1 $c2          
+    $c3  $c1 $c2  $c3 $c1 $c2  $c3  
+    $c3  $c1 $c2  $c3 $c1 $c2  $c3  
+    $c3           
+    `,
     "$": `
-$c3    $c1 $c2 $c3    
-$c3 $c1 $c2       $c3 
-$c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
-$c1 $c2  $c3 $c1 $c2 $c3    
-$c3 $c1 $c2       $c3 
-$c3    $c1 $c2 $c3 $c1 $c2  $c3
-$c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
-$c3 $c1 $c2       $c3 
-$c3    $c1 $c2 $c3    
-`,
+    $c3    $c1 $c2 $c3    
+    $c3 $c1 $c2       $c3 
+    $c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
+    $c1 $c2  $c3 $c1 $c2 $c3    
+    $c3 $c1 $c2       $c3 
+    $c3    $c1 $c2 $c3 $c1 $c2  $c3
+    $c1 $c2  $c3 $c1 $c2 $c3 $c1 $c2  $c3
+    $c3 $c1 $c2       $c3 
+    $c3    $c1 $c2 $c3    
+    `,
     "%": `
-$c3         
-$c1 $c2  $c3   $c1 $c2  
-$c3     $c1 $c2  $c3 
-$c3    $c1 $c2  $c3  
-$c3   $c1 $c2  $c3   
-$c3  $c1 $c2  $c3    
-$c3 $c1 $c2  $c3     
-$c1 $c2  $c3   $c1 $c2  
-$c3         
-`,
+    $c3         
+    $c1 $c2  $c3   $c1 $c2  
+    $c3     $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3  
+    $c3   $c1 $c2  $c3   
+    $c3  $c1 $c2  $c3    
+    $c3 $c1 $c2  $c3     
+    $c1 $c2  $c3   $c1 $c2  
+    $c3         
+    `,
     "^": `
-$c3        
-$c3        
-$c3  $c1 $c2   $c3  
-$c3 $c1 $c2  $c1 $c2  $c3 
-$c1 $c2  $c3  $c1 $c2  $c3
-$c3        
-$c3        
-$c3        
-$c3        
-`,
+    $c3        
+    $c3        
+    $c3  $c1 $c2   $c3  
+    $c3 $c1 $c2  $c1 $c2  $c3 
+    $c1 $c2  $c3  $c1 $c2  $c3
+    $c3        
+    $c3        
+    $c3        
+    $c3        
+    `,
     "&": `
-$c3           
-$c3  $c1 $c2    $c3    
-$c3 $c1 $c2  $c3 $c1 $c2  $c3   
-$c3  $c1 $c2    $c3    
-$c3 $c1 $c2  $c3 $c1 $c2  $c3   
-$c1 $c2  $c3   $c1 $c2  $c3  
-$c1 $c2  $c3    $c1 $c2  $c3 
-$c3 $c1 $c2      $c1 $c2  $c3
-$c3           
-`,
+    $c3           
+    $c3  $c1 $c2    $c3    
+    $c3 $c1 $c2  $c3 $c1 $c2  $c3   
+    $c3  $c1 $c2    $c3    
+    $c3 $c1 $c2  $c3 $c1 $c2  $c3   
+    $c1 $c2  $c3   $c1 $c2  $c3  
+    $c1 $c2  $c3    $c1 $c2  $c3 
+    $c3 $c1 $c2      $c1 $c2  $c3
+    $c3           
+    `,
     "*": `
-$c3     
-$c3     
-$c1 $c2 $c3 $c1 $c2 
-$c3 $c1 $c2  $c3 
-$c1 $c2 $c3 $c1 $c2 
-$c3     
-$c3     
-$c3     
-$c3     
-`,
+    $c3     
+    $c3     
+    $c1 $c2 $c3 $c1 $c2 
+    $c3 $c1 $c2  $c3 
+    $c1 $c2 $c3 $c1 $c2 
+    $c3     
+    $c3     
+    $c3     
+    $c3     
+    `,
     "(": `
-$c3     
-$c3  $c1 $c2  $c3
-$c3 $c1 $c2  $c3 
-$c1 $c2  $c3  
-$c1 $c2  $c3  
-$c1 $c2  $c3  
-$c3 $c1 $c2  $c3 
-$c3  $c1 $c2  $c3
-$c3     
-`,
+    $c3     
+    $c3  $c1 $c2  $c3
+    $c3 $c1 $c2  $c3 
+    $c1 $c2  $c3  
+    $c1 $c2  $c3  
+    $c1 $c2  $c3  
+    $c3 $c1 $c2  $c3 
+    $c3  $c1 $c2  $c3
+    $c3     
+    `,
     ")": `
-$c3     
-$c1 $c2  $c3  
-$c3 $c1 $c2  $c3 
-$c3  $c1 $c2  $c3
-$c3  $c1 $c2  $c3
-$c3  $c1 $c2  $c3
-$c3 $c1 $c2  $c3 
-$c1 $c2  $c3  
-$c3     
-`,
+    $c3     
+    $c1 $c2  $c3  
+    $c3 $c1 $c2  $c3 
+    $c3  $c1 $c2  $c3
+    $c3  $c1 $c2  $c3
+    $c3  $c1 $c2  $c3
+    $c3 $c1 $c2  $c3 
+    $c1 $c2  $c3  
+    $c3     
+    `,
     "_": `
-$c3         
-$c3         
-$c3         
-$c3         
-$c3         
-$c3         
-$c3         
-$c1 $c2        $c3
-$c3         
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c3         
+    $c3         
+    $c3         
+    $c3         
+    $c1 $c2        $c3
+    $c3         
+    `,
     "-": `
-$c3         
-$c3         
-$c3         
-$c3         
-$c1 $c2        $c3
-$c3         
-$c3         
-$c3         
-$c3         
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c3         
+    $c1 $c2        $c3
+    $c3         
+    $c3         
+    $c3         
+    $c3         
+    `,
     "+": `
-$c3         
-$c3         
-$c3   $c1 $c2  $c3   
-$c3   $c1 $c2  $c3   
-$c1 $c2        $c3
-$c3   $c1 $c2  $c3   
-$c3   $c1 $c2  $c3   
-$c3         
-$c3         
-`,
+    $c3         
+    $c3         
+    $c3   $c1 $c2  $c3   
+    $c3   $c1 $c2  $c3   
+    $c1 $c2        $c3
+    $c3   $c1 $c2  $c3   
+    $c3   $c1 $c2  $c3   
+    $c3         
+    $c3         
+    `,
     "=": `
-$c3         
-$c3         
-$c3         
-$c1 $c2        $c3
-$c3         
-$c1 $c2        $c3
-$c3         
-$c3         
-$c3         
-`,
+    $c3         
+    $c3         
+    $c3         
+    $c1 $c2        $c3
+    $c3         
+    $c1 $c2        $c3
+    $c3         
+    $c3         
+    $c3         
+    `,
     "|": `
-$c3   
-$c1 $c2  $c3
-$c1 $c2  $c3
-$c1 $c2  $c3
-$c1 $c2  $c3
-$c1 $c2  $c3
-$c1 $c2  $c3
-$c1 $c2  $c3
-$c3   
-`,
+    $c3   
+    $c1 $c2  $c3
+    $c1 $c2  $c3
+    $c1 $c2  $c3
+    $c1 $c2  $c3
+    $c1 $c2  $c3
+    $c1 $c2  $c3
+    $c1 $c2  $c3
+    $c3   
+    `,
     "\\": `
-$c3         
-$c1 $c2  $c3      
-$c3 $c1 $c2  $c3     
-$c3  $c1 $c2  $c3    
-$c3   $c1 $c2  $c3   
-$c3    $c1 $c2  $c3  
-$c3     $c1 $c2  $c3 
-$c3      $c1 $c2  $c3
-$c3         
-`,
+    $c3         
+    $c1 $c2  $c3      
+    $c3 $c1 $c2  $c3     
+    $c3  $c1 $c2  $c3    
+    $c3   $c1 $c2  $c3   
+    $c3    $c1 $c2  $c3  
+    $c3     $c1 $c2  $c3 
+    $c3      $c1 $c2  $c3
+    $c3         
+    `,
     "[": `
-$c3     
-$c1 $c2    $c3
-$c1 $c2  $c3  
-$c1 $c2  $c3  
-$c1 $c2  $c3  
-$c1 $c2  $c3  
-$c1 $c2  $c3  
-$c1 $c2    $c3
-$c3     
-`,
+    $c3     
+    $c1 $c2    $c3
+    $c1 $c2  $c3  
+    $c1 $c2  $c3  
+    $c1 $c2  $c3  
+    $c1 $c2  $c3  
+    $c1 $c2  $c3  
+    $c1 $c2    $c3
+    $c3     
+    `,
     "]": `
-$c3     
-$c1 $c2    $c3
-$c3  $c1 $c2  $c3
-$c3  $c1 $c2  $c3
-$c3  $c1 $c2  $c3
-$c3  $c1 $c2  $c3
-$c3  $c1 $c2  $c3
-$c1 $c2    $c3
-$c3     
-`,
+    $c3     
+    $c1 $c2    $c3
+    $c3  $c1 $c2  $c3
+    $c3  $c1 $c2  $c3
+    $c3  $c1 $c2  $c3
+    $c3  $c1 $c2  $c3
+    $c3  $c1 $c2  $c3
+    $c1 $c2    $c3
+    $c3     
+    `,
     "{": `
-$c3     
-$c3 $c1 $c2   $c3
-$c1 $c2  $c3  
-$c3 $c1 $c2  $c3 
-$c1 $c2  $c3  
-$c3 $c1 $c2  $c3 
-$c1 $c2  $c3  
-$c3 $c1 $c2   $c3
-$c3     
-`,
+    $c3     
+    $c3 $c1 $c2   $c3
+    $c1 $c2  $c3  
+    $c3 $c1 $c2  $c3 
+    $c1 $c2  $c3  
+    $c3 $c1 $c2  $c3 
+    $c1 $c2  $c3  
+    $c3 $c1 $c2   $c3
+    $c3     
+    `,
     "}": `
-$c3     
-$c1 $c2   $c3 
-$c3  $c1 $c2  $c3
-$c3 $c1 $c2  $c3 
-$c3  $c1 $c2  $c3
-$c3 $c1 $c2  $c3 
-$c3  $c1 $c2  $c3
-$c1 $c2   $c3 
-$c3     
-`,
+    $c3     
+    $c1 $c2   $c3 
+    $c3  $c1 $c2  $c3
+    $c3 $c1 $c2  $c3 
+    $c3  $c1 $c2  $c3
+    $c3 $c1 $c2  $c3 
+    $c3  $c1 $c2  $c3
+    $c1 $c2   $c3 
+    $c3     
+    `,
     ":": `
-$c3     
-$c3     
-$c3     
-$c3 $c1 $c2  $c3 
-$c3     
-$c3     
-$c3 $c1 $c2  $c3 
-$c3     
-$c3     
-`,
+    $c3     
+    $c3     
+    $c3     
+    $c3 $c1 $c2  $c3 
+    $c3     
+    $c3     
+    $c3 $c1 $c2  $c3 
+    $c3     
+    $c3     
+    `,
     ";": `
-$c3     
-$c3     
-$c3     
-$c3 $c1 $c2  $c3 
-$c3     
-$c3     
-$c3 $c1 $c2  $c3 
-$c3  $c1 $c2 $c3 
-$c3     
-`,
+    $c3     
+    $c3     
+    $c3     
+    $c3 $c1 $c2  $c3 
+    $c3     
+    $c3     
+    $c3 $c1 $c2  $c3 
+    $c3  $c1 $c2 $c3 
+    $c3     
+    `,
     "'": `
-$c3    
-$c3 $c1 $c2  
-$c1 $c2  $c3 
-$c3    
-$c3    
-$c3    
-$c3    
-$c3    
-$c3    
-`,
+    $c3    
+    $c3 $c1 $c2  
+    $c1 $c2  $c3 
+    $c3    
+    $c3    
+    $c3    
+    $c3    
+    $c3    
+    $c3    
+    `,
     '"': `
-$c3       
-$c1 $c2  $c3 $c1 $c2  $c3
-$c1 $c2  $c3 $c1 $c2  $c3
-$c3       
-$c3       
-$c3       
-$c3       
-$c3       
-$c3       
-`,
+    $c3       
+    $c1 $c2  $c3 $c1 $c2  $c3
+    $c1 $c2  $c3 $c1 $c2  $c3
+    $c3       
+    $c3       
+    $c3       
+    $c3       
+    $c3       
+    $c3       
+    `,
     "<": `
-$c3       
-$c3       
-$c3    $c1 $c2  $c3
-$c3  $c1 $c2  $c3  
-$c1 $c2  $c3    
-$c3  $c1 $c2  $c3  
-$c3    $c1 $c2  $c3
-$c3       
-$c3       
-`,
+    $c3       
+    $c3       
+    $c3    $c1 $c2  $c3
+    $c3  $c1 $c2  $c3  
+    $c1 $c2  $c3    
+    $c3  $c1 $c2  $c3  
+    $c3    $c1 $c2  $c3
+    $c3       
+    $c3       
+    `,
     ">": `
-$c3       
-$c3       
-$c1 $c2  $c3    
-$c3  $c1 $c2  $c3  
-$c3    $c1 $c2  $c3
-$c3  $c1 $c2  $c3  
-$c1 $c2  $c3    
-$c3       
-$c3       
-`,
+    $c3       
+    $c3       
+    $c1 $c2  $c3    
+    $c3  $c1 $c2  $c3  
+    $c3    $c1 $c2  $c3
+    $c3  $c1 $c2  $c3  
+    $c1 $c2  $c3    
+    $c3       
+    $c3       
+    `,
     "?": `
-$c3         
-$c3  $c1 $c2     $c3 
-$c3 $c1 $c2  $c3  $c1 $c2  
-$c3     $c1 $c2  $c3 
-$c3    $c1 $c2  $c3  
-$c3   $c1 $c2  $c3   
-$c3         
-$c3 $c1 $c2  $c3     
-$c3         
-`,
+    $c3         
+    $c3  $c1 $c2     $c3 
+    $c3 $c1 $c2  $c3  $c1 $c2  
+    $c3     $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3  
+    $c3   $c1 $c2  $c3   
+    $c3         
+    $c3 $c1 $c2  $c3     
+    $c3         
+    `,
     ",": `
-$c3   
-$c3   
-$c3   
-$c3   
-$c3   
-$c3   
-$c3   
-$c1 $c2  $c3
-$c3 $c1 $c2 $c3
-`,
+    $c3   
+    $c3   
+    $c3   
+    $c3   
+    $c3   
+    $c3   
+    $c3   
+    $c1 $c2  $c3
+    $c3 $c1 $c2 $c3
+    `,
     ".": `
-$c3   
-$c3   
-$c3   
-$c3   
-$c3   
-$c3   
-$c3   
-$c1 $c2  
-$c3   
-`,
+    $c3   
+    $c3   
+    $c3   
+    $c3   
+    $c3   
+    $c3   
+    $c3   
+    $c1 $c2  
+    $c3   
+    `,
     "/": `
-$c3         
-$c3      $c1 $c2  $c3
-$c3     $c1 $c2  $c3 
-$c3    $c1 $c2  $c3  
-$c3   $c1 $c2  $c3   
-$c3  $c1 $c2  $c3    
-$c3 $c1 $c2  $c3     
-$c1 $c2  $c3      
-$c3         
-`
+    $c3         
+    $c3      $c1 $c2  $c3
+    $c3     $c1 $c2  $c3 
+    $c3    $c1 $c2  $c3  
+    $c3   $c1 $c2  $c3   
+    $c3  $c1 $c2  $c3    
+    $c3 $c1 $c2  $c3     
+    $c1 $c2  $c3      
+    $c3         
+    `
 }

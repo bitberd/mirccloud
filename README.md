@@ -16,7 +16,7 @@ Enhancements for your IRCCloud chatting experience.
 
 - `/hueg <text>` - Basic HUEG text support. (basic support, somewhat broken atm)
 
-- `/alias <alias name> <alias text>`
+- `/alias <alias name> <alias text> <optional [&1, &2, &3 (wildcards)]>`
 
 ## Coming soon 
 
@@ -34,8 +34,8 @@ Enhancements for your IRCCloud chatting experience.
 - `/fb lol hey everyone -repeat 3 -color rand`
 - `/troll`
 - `/hueg lol`
-- `/alias lol hahahahahahahha`
-- `/lol` <-- alias
+- `/alias lol lol @ &1; lol @ &2; lol @ &3`
+- `/lol some_chatter another_chatter another_chatter_lol` <-- alias
 
 ## Todo
 

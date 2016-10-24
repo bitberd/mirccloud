@@ -3,7 +3,7 @@
 // @namespace https://github.com/erm/mirccloud
 // @description IRCCloud chat enhancement
 // @downloadURL https://raw.githubusercontent.com/erm/mirccloud/master/mirccloud.user.js
-// @version 1.2.5
+// @version 1.2.6
 // @match https://www.irccloud.com/*
 // @match https://irccloud.mozilla.com/*
 // @noframes
@@ -73,7 +73,8 @@
                     localStorage.setItem(alias_name, args.join(' '));
                 }
                 if (cmd == '/box') {
-                    var randomColors = randomColorCode(true);
+                    var randomColors = randomChoice([[12, 02], [11, 10] ,[07, 08], [9, 3], [13, 06], [15, 14], [04, 05]])
+                    
                     var col1 = randomColors[0];
                     var col2 = randomColors[1];
                     var col = "00," + col1;

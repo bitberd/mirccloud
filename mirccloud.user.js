@@ -3,7 +3,7 @@
 // @namespace https://github.com/erm/mirccloud
 // @description IRCCloud chat enhancement
 // @downloadURL https://raw.githubusercontent.com/erm/mirccloud/master/mirccloud.user.js
-// @version 1.2.4
+// @version 1.2.5
 // @match https://www.irccloud.com/*
 // @match https://irccloud.mozilla.com/*
 // @noframes
@@ -71,6 +71,24 @@
                     var alias_name = '/' + args[0];
                     args.splice(0, 1);
                     localStorage.setItem(alias_name, args.join(' '));
+                }
+                if (cmd == '/box') {
+                    var randomColors = randomColorCode(true);
+                    var col1 = randomColors[0];
+                    var col2 = randomColors[1];
+                    var col = "00," + col1;
+                    var fc = ""+col1+","+col1;
+                    var bcol = ""+col2+","+col2;
+                    var end = "+";
+                    var parts = "-";
+                    var side = "|";
+                    var border = bcol + "#";
+                    var message = args.join(' ');
+                    var toppart = end + parts.repeat(message.length) + end;
+                    var top = fc + toppart;
+                    var middle = fc + side + col + message + fc + side + border;
+                    message = top + '\n' + middle + border + '\n' + top + border.repeat(2) + '\n  ' + border.repeat(toppart.length)
+                    context.apply(self, [message])
                 }
                 if (cmd == '/hueg') {
                     var randomColors = randomColorCode(true);
@@ -152,7 +170,7 @@
                 if (cmd == '/say') {
                     outputText = args.join(' ');
                 }
-                if (cmd != '/troll' && cmd != '/ascii' && cmd != '/hueg' && cmd != '/alias' && outputText != false) {
+                if (cmd != '/box' && cmd != '/troll' && cmd != '/ascii' && cmd != '/hueg' && cmd != '/alias' && outputText != false) {
                     if (colorFilter != false) {
                         var outputTextOld = outputText.slice(0);
                         var outputText = '';
@@ -272,7 +290,7 @@ function getRequest(requestArgs) {
 
 const COLOR_FILTER_OPTIONS = ['rand']; //, 'rb', 'usa'];
 const COLOR_CODE_RANGE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-const COMMANDS = ['/ascii', '/fb', '/rst', '/troll', '/say', '/hueg', '/amsg', '/aliassay', '/alias'];
+const COMMANDS = ['/ascii', '/fb', '/rst', '/troll', '/say', '/hueg', '/amsg', '/aliassay', '/alias', '/box'];
 const DELAY = 0.35;
 const RST_MARKS = ["☑", "☒", "☓", "✓", "✔", "✕", "✖", "✗", "✘"];
 const RST_CHOICES = {

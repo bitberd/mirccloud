@@ -22,20 +22,20 @@ Enhancements for your IRCCloud chatting experience.
 
 - `/amsg`
 - `/perform`
-- `/alias`
 
 ## Available filters
 
 - `-repeat [n]` - Repeat a command n times. This filter can be used on any command (except /ascii and /troll and /hueg atm LOL)
-- `-color [r,]` - Colorize text, currently only one option `-r` for random foreground and background for all characters.
+- `-color [rand]` - Colorize text, currently only one option `-r` for random foreground and background for all characters.
 
 ## Example usage: 
 
 - `/ascii http://wepump.in/ascii/lol.txt`
-- `/fb lol hey everyone -repeat 3 -color r`
+- `/fb lol hey everyone -repeat 3 -color rand`
 - `/troll`
 - `/hueg lol`
-- `/big 1 lol`
+- `/alias lol lol @ &1; lol @ &2; lol @ &3`
+- `/lol some_chatter another_chatter another_chatter_lol` <-- alias
 
 ## Todo
 

@@ -314,7 +314,7 @@ function getRequest(requestArgs) {
 
 const COLOR_FILTER_OPTIONS = ['rand']; //, 'rb', 'usa'];
 const COLOR_CODE_RANGE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-const COMMANDS = ['/big', '/ascii', '/fb', '/rst', '/troll', '/say', '/hueg', '/amsg', '/aliassay', '/alias', '/box'];
+const COMMANDS = ['/big', '/ascii', '/fb', '/rst', '/troll', '/say', '/hueg', '/amsg', '/alias', '/box'];
 const DELAY = 0.35;
 const RST_MARKS = ["☑", "☒", "☓", "✓", "✔", "✕", "✖", "✗", "✘"];
 const RST_CHOICES = {

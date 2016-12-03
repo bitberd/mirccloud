@@ -14,7 +14,6 @@
         var context = window.SESSIONVIEW.mainArea.current.input.__proto__.say;
         window.SESSIONVIEW.mainArea.current.input.__proto__.say = function(m) {
             var args = m.split(" ")
-            console.log(args);
             var cmd = args[0];
             args.splice(0, 1);
             if (m.startsWith('/') && COMMANDS.indexOf(cmd) >= 0 || localStorage.getItem(cmd) != null) {

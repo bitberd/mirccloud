@@ -16,6 +16,8 @@ Enhancements for your IRCCloud chatting experience.
 
 - `/hueg <text>` - Basic HUEG text support. (basic support, somewhat broken atm)
 
+- `/big <arg: 1> <text>` - Big font (more fonts coming eventually, use "1" for now)
+
 ## Coming soon 
 
 - `/amsg`
@@ -33,6 +35,7 @@ Enhancements for your IRCCloud chatting experience.
 - `/fb lol hey everyone -repeat 3 -color r`
 - `/troll`
 - `/hueg lol`
+- `/big 1 lol`
 
 ## Todo
 

@@ -3,7 +3,7 @@
 // @namespace https://github.com/erm/mirccloud
 // @description IRCCloud chat enhancement
 // @downloadURL https://raw.githubusercontent.com/erm/mirccloud/master/mirccloud.user.js
-// @version 1.2.2
+// @version 1.2.7
 // @match https://www.irccloud.com/*
 // @match https://irccloud.mozilla.com/*
 // @noframes
@@ -16,7 +16,7 @@
             var args = m.split(' ');
             var cmd = args[0];
             args.splice(0, 1);
-            if (m.startsWith('/') && COMMANDS.indexOf(cmd) >= 0) {
+            if (m.startsWith('/') && COMMANDS.indexOf(cmd) >= 0 || localStorage.getItem(cmd) != null) {
                 var outputText = [];
                 // Repeat filter
                 var repeatFilter = 1;
@@ -37,13 +37,67 @@
                 }
                 this.clear()
                 var self = this;
+                if (COMMANDS.indexOf(cmd) < 0) {
+                    console.log(args.length);
+                    alias = localStorage.getItem(cmd);
+                    if (alias.indexOf('&1') !== -1) {
+                        if (args.length > 0) {
+                            alias = alias.replace(/&1/g, args[0])
+                        } else {
+                            outputText = -1;
+                        }
+                    }
+                    if (alias.indexOf('&2') !== -1 && outputText != -1) {
+                        if (args.length > 1) {
+                            alias = alias.replace(/&2/g, args[1])
+                        } else {
+                            outputText = -1;
+                        }
+                    }
+                    if (alias.indexOf('&3') !== -1 && outputText != -1) {
+                        if (args.length > 2) {
+                            alias = alias.replace(/&3/g, args[2])
+                        } else {
+                            outputText = -1;
+                        }
+                    }
+                    console.log(outputText);
+                    if (outputText != -1) {
+                        console.log(outputText);
+                        outputText = alias;
+                    }
+                }
+                if (cmd == '/alias') {
+                    var alias_name = '/' + args[0];
+                    args.splice(0, 1);
+                    localStorage.setItem(alias_name, args.join(' '));
+                }
+                if (cmd == '/box') {
+                    var randomColors = randomChoice([[12, 02], [11, 10] ,[07, 08], [9, 3], [13, 06], [15, 14], [04, 05]])
+                    
+                    var col1 = randomColors[0];
+                    var col2 = randomColors[1];
+                    var col = "00," + col1;
+                    var fc = ""+col1+","+col1;
+                    var bcol = ""+col2+","+col2;
+                    var end = "+";
+                    var parts = "-";
+                    var side = "|";
+                    var border = bcol + "#";
+                    var message = args.join(' ');
+                    var toppart = end + parts.repeat(message.length) + end;
+                    var top = fc + toppart;
+                    var middle = fc + side + col + message + fc + side + border;
+                    message = top + '\n' + middle + border + '\n' + top + border.repeat(2) + '\n  ' + border.repeat(toppart.length)
+                    context.apply(self, [message])
+                }
                 if (cmd == '/hueg') {
                     var randomColors = randomColorCode(true);
                     var r1 = randomColors[0];
                     var r2 = randomColors[1];
-                    var c2 = "" + r1 + "," + r1; 
-                    var c1 = "" + r2 + "," + r2; 
-                    var c3 = ""; 
+                    var c2 = "" + r1 + "," + r1;
+                    var c1 = "" + r2 + "," + r2;
+                    var c3 = "";
                     var buffer = [];
                     var strs = args;
                     for (i = 0; i < strs.length; i++) {
@@ -63,7 +117,30 @@
                             count = count + 1;
                         }
                     }
-                    var newbuffer = lineUp(buffer);
+                    var newbuffer = lineUp(buffer, 9);
+                    for (i = 0; i < newbuffer.length; i++) {
+                        context.apply(self, [newbuffer[i]]);
+                    }
+                }
+                if (cmd == '/big') { // todo: combine base logic in /hueg with this
+                    var font = BIG_FONTS[args[0]];
+                    console.log(font);
+                    args.splice(0, 1);
+                    var buffer = [];
+                    var strs = args;
+
+                    for (i = 0; i < strs.length; i++) {
+                        var count = 0;
+                        var listl = strs[i].split().length;
+                        for (z = 0; z < strs[i].length; z++) {
+                            var l = strs[i][z].toUpperCase();
+                            char = font[l];
+                            buffer.push(char);
+                            count = count + 1;
+                        }
+                    }
+                    var newbuffer = lineUp(buffer, 6); // todo: add height to font definition
+
                     for (i = 0; i < newbuffer.length; i++) {
                         context.apply(self, [newbuffer[i]]);
                     }
@@ -117,7 +194,7 @@
                 if (cmd == '/say') {
                     outputText = args.join(' ');
                 }
-                if (cmd != '/troll' && cmd != '/ascii' && cmd != '/hueg') {
+                if (cmd != '/big' && cmd != '/box' && cmd != '/troll' && cmd != '/ascii' && cmd != '/hueg' && cmd != '/alias' && outputText != false) {
                     if (colorFilter != false) {
                         var outputTextOld = outputText.slice(0);
                         var outputText = '';
@@ -162,7 +239,7 @@
     })();
 })();
 
-function lineUp(buff) {
+function lineUp(buff, height) {
     var newbuff = [];
     var i = '';
     var index = 0;
@@ -176,7 +253,7 @@ function lineUp(buff) {
     }
     var line = '';
     var x = '';
-    for (i = 0; i < 9; i++) {
+    for (i = 0; i < height; i++) {
         line = '';
         for (z = 0; z < buff.length; z++) {
             x = buff[z];
@@ -237,7 +314,7 @@ function getRequest(requestArgs) {
 
 const COLOR_FILTER_OPTIONS = ['rand']; //, 'rb', 'usa'];
 const COLOR_CODE_RANGE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-const COMMANDS = ['/ascii', '/fb', '/rst', '/troll', '/say', '/hueg'];
+const COMMANDS = ['/big', '/ascii', '/fb', '/rst', '/troll', '/say', '/hueg', '/amsg', '/aliassay', '/alias', '/box'];
 const DELAY = 0.35;
 const RST_MARKS = ["☑", "☒", "☓", "✓", "✔", "✕", "✖", "✗", "✘"];
 const RST_CHOICES = {
@@ -1303,4 +1380,225 @@ $c3 $c1 $c2  $c3
 $c1 $c2  $c3      
 $c3         
 `
+}
+
+const BIG_FONTS = {
+
+"1": {
+    " ": `
+      
+      
+      
+      
+
+`,
+    "A": `
+█████╗     
+██╔══██╗   
+███████║   
+██╔══██║   
+██║  ██║   
+╚═╝  ╚═╝   
+`,
+    "B": `     
+██████╗    
+██╔══██╗   
+██████╔╝   
+██╔══██╗   
+██████╔╝   
+╚═════╝    
+`,
+    "C": ` 
+ ██████╗   
+██╔════╝   
+██║        
+██║        
+╚██████╗   
+ ╚═════╝   
+`,
+    "D": `  
+██████╗    
+██╔══██╗   
+██║  ██║   
+██║  ██║   
+██████╔╝   
+╚═════╝    
+`,
+    "E": ` 
+███████╗   
+██╔════╝   
+█████╗     
+██╔══╝     
+███████╗   
+╚══════╝   
+`,
+    "F": `
+███████╗   
+██╔════╝   
+█████╗     
+██╔══╝     
+██║        
+╚═╝        
+`,
+    "G": ` 
+ ██████╗   
+██╔════╝   
+██║  ███╗  
+██║   ██║  
+╚██████╔╝  
+ ╚═════╝   
+`,
+    "H": `
+██╗  ██╗   
+██║  ██║   
+███████║   
+██╔══██║   
+██║  ██║   
+╚═╝  ╚═╝   
+`,
+    "I": `
+██╗        
+██║        
+██║        
+██║        
+██║        
+╚═╝        
+`,
+    "J": `
+     ██╗   
+     ██║   
+     ██║   
+██   ██║   
+╚█████╔╝   
+ ╚════╝    
+`,
+    "K": `
+██╗  ██╗   
+██║ ██╔╝   
+█████╔╝    
+██╔═██╗    
+██║  ██╗   
+╚═╝  ╚═╝   
+`,
+    "L": `
+██╗        
+██║        
+██║        
+██║        
+███████╗   
+╚══════╝   
+`,
+    "M": `
+███╗   ███╗
+████╗ ████║
+██╔████╔██║
+██║╚██╔╝██║
+██║ ╚═╝ ██║
+╚═╝     ╚═╝
+`,
+    "N": `
+███╗   ██╗ 
+████╗  ██║ 
+██╔██╗ ██║ 
+██║╚██╗██║ 
+██║ ╚████║ 
+╚═╝  ╚═══╝ 
+`,
+    "O": `
+ ██████╗   
+██╔═══██╗  
+██║   ██║  
+██║   ██║  
+╚██████╔╝  
+ ╚═════╝   
+`,
+    "P": `
+██████╗    
+██╔══██╗   
+██████╔╝   
+██╔═══╝    
+██║        
+╚═╝        
+`,
+    "Q": `
+ ██████╗   
+██╔═══██╗  
+██║   ██║  
+██║▄▄ ██║  
+╚██████╔╝  
+ ╚══▀▀═╝   
+`,
+    "R": `
+██████╗    
+██╔══██╗   
+██████╔╝   
+██╔══██╗   
+██║  ██║   
+╚═╝  ╚═╝   
+`,
+    "S": `
+███████╗   
+██╔════╝   
+███████╗   
+╚════██║   
+███████║   
+╚══════╝   
+`,
+    "T": `
+████████╗  
+╚══██╔══╝  
+   ██║     
+   ██║     
+   ██║     
+   ╚═╝     
+`,
+    "U": `
+██╗   ██╗  
+██║   ██║  
+██║   ██║  
+██║   ██║  
+╚██████╔╝  
+ ╚═════╝   
+`,
+    "V": `
+██╗   ██╗  
+██║   ██║  
+██║   ██║  
+╚██╗ ██╔╝  
+ ╚████╔╝   
+  ╚═══╝    
+`,
+    "W": `
+██╗    ██╗ 
+██║    ██║ 
+██║ █╗ ██║ 
+██║███╗██║ 
+╚███╔███╔╝ 
+ ╚══╝╚══╝  
+`,
+    "X": `
+██╗  ██╗   
+╚██╗██╔╝   
+ ╚███╔╝    
+ ██╔██╗    
+██╔╝ ██╗   
+╚═╝  ╚═╝   
+`,
+    "Y": `
+██╗   ██╗  
+╚██╗ ██╔╝  
+ ╚████╔╝   
+  ╚██╔╝    
+   ██║     
+   ╚═╝     
+`,
+    "Z": `
+███████╗   
+╚══███╔╝   
+  ███╔╝    
+ ███╔╝     
+███████╗   
+╚══════╝ 
+`
+}
 }

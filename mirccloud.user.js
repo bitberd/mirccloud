@@ -3,7 +3,7 @@
 // @namespace https://github.com/erm/mirccloud
 // @description IRCCloud chat enhancement
 // @downloadURL https://raw.githubusercontent.com/erm/mirccloud/master/mirccloud.user.js
-// @version 1.2.8
+// @version 1.2.9
 // @match https://www.irccloud.com/*
 // @match https://irccloud.mozilla.com/*
 // @noframes
@@ -13,7 +13,8 @@
     function init() {
         var context = window.SESSIONVIEW.mainArea.current.input.__proto__.say;
         window.SESSIONVIEW.mainArea.current.input.__proto__.say = function(m) {
-            var args = m.split(' ');
+            var args = m.split(" ")
+            console.log(args);
             var cmd = args[0];
             args.splice(0, 1);
             if (m.startsWith('/') && COMMANDS.indexOf(cmd) >= 0 || localStorage.getItem(cmd) != null) {
@@ -127,7 +128,7 @@
                     args.splice(0, 1);
                     var buffer = [];
                     var strs = args;
-
+                    console.log(strs);
                     for (i = 0; i < strs.length; i++) {
                         var count = 0;
                         var listl = strs[i].split().length;
@@ -323,16 +324,16 @@ const RST_CHOICES = {
 };
 
 const HUEG_CHARS = {
-    " ": `
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
-$c3      
+    ",": `
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
+$c3   
 `,
     "\u5350": `
 $c3             
@@ -1346,7 +1347,7 @@ $c3
 $c3 $c1 $c2  $c3     
 $c3         
 `,
-    ",": `
+    "TDO": `
 $c3   
 $c3   
 $c3   
@@ -1384,7 +1385,8 @@ $c3
 const BIG_FONTS = {
 
 "1": {
-    " ": `
+    ",": `
+  
   
   
   
